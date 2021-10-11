@@ -7,16 +7,7 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <bean id="tagBean"
-          class="com.epam.esm.bean.TagBean">
-    </bean>
-
-    <bean id="giftBean"
-          class="com.epam.esm.bean.GiftCertificateBean">
-    </bean>
-
-    <bean id="giftTagBean"
-          class="com.epam.esm.bean.GiftTagBean">
-    </bean>
+         <context:component-scan base-package="com.epam.esm.bean" />
 
 </beans>
+
