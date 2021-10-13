@@ -1,7 +1,11 @@
 package com.epam.esm.bean;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+
 import java.util.Objects;
 
+@Component
 public class TagBean {
     private int id;
     private String name;

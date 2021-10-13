@@ -2,5 +2,5 @@ package com.epam.esm.dao;
 
 public interface TagDAO {
 
-    public void save(String name);
+    public void save(String name) throws DAOException;
 }
