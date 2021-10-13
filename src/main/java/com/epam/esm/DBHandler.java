@@ -1,5 +1,6 @@
-package com.epam.esm.dao.handler;
+package com.epam.esm;
 
+import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.Connection;
@@ -9,7 +10,7 @@ import java.sql.Statement;
 
 public class DBHandler {
     private static HikariDataSource ds;
-    private static HikariDataSource config;
+    private static HikariConfig config = new HikariConfig();
 
     static {
         config.setJdbcUrl("jdbc:mysql://localhost:3306/gift_certificates?serverTimezone=Europe/Moscow&useSSL=false");
@@ -22,7 +23,11 @@ public class DBHandler {
         HikariDataSource ds = new HikariDataSource(config);
     }
 
+    public DBHandler() {
+    }
+
     public static Connection getConn() throws SQLException{
+        HikariDataSource ds = new HikariDataSource(config);
         return ds.getConnection();
     }
 

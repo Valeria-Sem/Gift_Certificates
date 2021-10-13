@@ -10,8 +10,9 @@ import com.epam.esm.service.validator.TagValidator;
 import com.epam.esm.service.validator.ValidatorException;
 import com.epam.esm.service.validator.ValidatorFactory;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class TagServiceImpl implements TagService {
     private final Logger LOGGER = Logger.getLogger(TagServiceImpl.class);
 
@@ -28,9 +29,11 @@ public class TagServiceImpl implements TagService {
     @Override
     public void save(String name) throws ServiceException {
         try{
-            tagValidator.validateTagName(name);
+         //   tagValidator.validateTagName(name);
             tagDAO.save(name);
-        } catch (ValidatorException | DAOException e){
+//        } catch (ValidatorException | DAOException e){
+        } catch (DAOException e){
+
             LOGGER.warn("some problems with validate or saving tag");
             throw new ServiceException(e);
         }

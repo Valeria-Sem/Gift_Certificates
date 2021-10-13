@@ -5,23 +5,22 @@ import com.epam.esm.service.ServiceProvider;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/api/tag")
 public class TagController {
-//    @Autowired
+
     private TagService tagService;
+    private ServiceProvider serviceProvider;
 
     @Autowired
-    public TagController(ServiceProvider serviceProvider) {
+    public TagController() {
+        serviceProvider = ServiceProvider.getInstance();
         this.tagService = serviceProvider.getTagService();
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public void save(@RequestBody String name) throws ServiceException {
         tagService.save(name);
     }
