@@ -1,4 +1,4 @@
-package com.epam.esm;
+package com.epam.esm.dao.handler;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -20,14 +20,13 @@ public class DBHandler {
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
-        HikariDataSource ds = new HikariDataSource(config);
+        ds = new HikariDataSource(config);
     }
 
     public DBHandler() {
     }
 
     public static Connection getConn() throws SQLException{
-        HikariDataSource ds = new HikariDataSource(config);
         return ds.getConnection();
     }
 
