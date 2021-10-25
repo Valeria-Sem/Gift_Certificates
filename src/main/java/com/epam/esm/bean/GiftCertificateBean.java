@@ -2,6 +2,7 @@ package com.epam.esm.bean;
 
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
 import java.util.Objects;
 
 @Component
@@ -11,15 +12,15 @@ public class GiftCertificateBean {
     private String description;
     private double price;
     private int duration;
-    private String createDate;      //ToDo create ISO 8601 date format
-    private String lastUpdateDate;  //ToDo create ISO 8601 date format
+    private Date createDate;
+    private Date lastUpdateDate;
 
     public GiftCertificateBean() {
     }
 
     public GiftCertificateBean(int id, String name, String description,
-                               double price, int duration, String createDate,
-                               String lastUpdateDate) {
+                               double price, int duration, Date createDate,
+                               Date lastUpdateDate) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -30,7 +31,7 @@ public class GiftCertificateBean {
     }
 
     public GiftCertificateBean(String name, String description, double price,
-                               int duration, String createDate, String lastUpdateDate) {
+                               int duration, Date createDate, Date lastUpdateDate) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -79,19 +80,19 @@ public class GiftCertificateBean {
         this.duration = duration;
     }
 
-    public String getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
-    public String getLastUpdateDate() {
+    public Date getLastUpdateDate() {
         return lastUpdateDate;
     }
 
-    public void setLastUpdateDate(String lastUpdateDate) {
+    public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
