@@ -4,18 +4,19 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.epam.esm</groupId>
-  <artifactId>Gift_Certificates</artifactId>
+  <artifactId>web</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>war</packaging>
 
-    <modules>
-      <module>web</module>
-      <module>service</module>
-      <module>dao</module>
-    </modules>
-    <packaging>pom</packaging>
+  <parent>
+    <groupId>com.epam.esm</groupId>
+    <artifactId>Gift_Certificates</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
 
-  <name>Gift_Certificates</name>
+
+
+  <name>web</name>
 <!--  &lt;!&ndash; FIXME change it to the project's website &ndash;&gt;-->
 <!--  <url>http://www.example.com</url>-->
 
@@ -32,6 +33,12 @@
       <artifactId>junit-jupiter-api</artifactId>
       <version>5.7.1</version>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.epam.esm</groupId>
+      <artifactId>service</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -100,6 +107,7 @@
       <version>${spring.version}</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-jdbc -->
     <dependency>
       <groupId>org.springframework.integration</groupId>
       <artifactId>spring-integration-jdbc</artifactId>
@@ -120,6 +128,7 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
@@ -143,17 +152,8 @@
 
   </dependencies>
 
-<!--  <packaging>pom</packaging>-->
-
-<!--  <modules>-->
-<!--    <module>backend</module>-->
-<!--    <module>fapi</module>-->
-<!--  </modules>-->
-
-
-
   <build>
-    <finalName>Gift_Certificates</finalName>
+    <finalName>backend</finalName>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>

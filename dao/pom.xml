@@ -4,20 +4,16 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.epam.esm</groupId>
-  <artifactId>Gift_Certificates</artifactId>
+  <artifactId>dao</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-    <modules>
-      <module>web</module>
-      <module>service</module>
-      <module>dao</module>
-    </modules>
-    <packaging>pom</packaging>
+  <parent>
+    <groupId>com.epam.esm</groupId>
+    <artifactId>Gift_Certificates</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
 
-  <name>Gift_Certificates</name>
-<!--  &lt;!&ndash; FIXME change it to the project's website &ndash;&gt;-->
-<!--  <url>http://www.example.com</url>-->
+  <name>dao</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -100,6 +96,7 @@
       <version>${spring.version}</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-jdbc -->
     <dependency>
       <groupId>org.springframework.integration</groupId>
       <artifactId>spring-integration-jdbc</artifactId>
@@ -120,6 +117,7 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
@@ -140,27 +138,24 @@
       <artifactId>jackson-databind</artifactId>
       <version>2.13.0</version>
     </dependency>
+      <dependency>
+          <groupId>org.modelmapper</groupId>
+          <artifactId>modelmapper</artifactId>
+          <version>2.4.4</version>
+          <scope>compile</scope>
+      </dependency>
 
   </dependencies>
 
-<!--  <packaging>pom</packaging>-->
-
-<!--  <modules>-->
-<!--    <module>backend</module>-->
-<!--    <module>fapi</module>-->
-<!--  </modules>-->
-
-
-
   <build>
-    <finalName>Gift_Certificates</finalName>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
+        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
           <version>3.1.0</version>
         </plugin>
-        <!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging -->
+        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.0.2</version>
@@ -174,8 +169,8 @@
           <version>2.22.1</version>
         </plugin>
         <plugin>
-          <artifactId>maven-war-plugin</artifactId>
-          <version>3.2.2</version>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.0.2</version>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
@@ -185,17 +180,16 @@
           <artifactId>maven-deploy-plugin</artifactId>
           <version>2.8.2</version>
         </plugin>
+        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.7.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
       </plugins>
     </pluginManagement>
-      <plugins>
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <configuration>
-                  <source>8</source>
-                  <target>8</target>
-              </configuration>
-          </plugin>
-      </plugins>
   </build>
 </project>
