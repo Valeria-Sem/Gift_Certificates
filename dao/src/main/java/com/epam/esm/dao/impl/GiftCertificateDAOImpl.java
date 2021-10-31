@@ -27,7 +27,6 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     private final String SELECT_BY_PART_OF_NAME = "select * from gift_certificate where name like '%' + ? + '%'";
     private final String SELECT_SORT_ASC = "select * from gift_certificate order by name asc";
     private final String SELECT_QUERY = "select * from gift_certificate ORDER BY id DESC LIMIT 1";
-//    private final String UPDATE_QUERY = "update gift_certificate set ? = ? where id = ?";
 
     @Autowired
     public GiftCertificateDAOImpl(JdbcTemplate jdbcTemplate) {
@@ -63,7 +62,6 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
                     if(key.equals("id")){
                         return;
                     }
-//                    jdbcTemplate.update(UPDATE_QUERY, key, value, updateParams.get("id"));
                     jdbcTemplate.update("update gift_certificate set " + key + " = '" + value + "' where id = " + updateParams.get("id"));
                 } catch (Exception e) {
                     LOGGER.error("some problems with updateParams");
