@@ -9,7 +9,6 @@ import com.epam.esm.service.ServiceException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.validator.TagValidator;
 import com.epam.esm.service.validator.ValidatorException;
-import com.epam.esm.service.validator.Validator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,10 +24,10 @@ public class TagServiceImpl implements TagService {
     private final TagConverter tagConverter;
 
     @Autowired
-    public TagServiceImpl(TagDAO tagDAO, TagConverter tagConverter){
+    public TagServiceImpl(TagDAO tagDAO, TagConverter tagConverter, TagValidator tagValidator){
         this.tagDAO = tagDAO;
         this.tagConverter = tagConverter;
-        tagValidator = Validator.getInstance().getTagValidator();
+        this.tagValidator = tagValidator;
     }
 
     @Override
@@ -46,8 +45,10 @@ public class TagServiceImpl implements TagService {
     @Override
     public void delete(int id) throws ServiceException {
         try{
+            tagValidator.validateId(id);
+
             tagDAO.delete(id);
-        } catch (DAOException e){
+        } catch (DAOException | ValidatorException e){
             LOGGER.warn("some service problems with deleting tag");
             throw new ServiceException(e);
         }
@@ -66,12 +67,14 @@ public class TagServiceImpl implements TagService {
     @Override
     public TagDTO getTagByName(String name) throws ServiceException {
         try {
+            tagValidator.validateTagName(name);
+
             if(tagDAO.getTagByName(name) == null){
                 return null;
             } else {
                 return tagConverter.mapToDto(tagDAO.getTagByName(name));
             }
-        } catch (DAOException e) {
+        } catch (DAOException | ValidatorException e) {
             LOGGER.warn("some service problems with extracting tag by name");
             throw new ServiceException(e);
         }

@@ -13,15 +13,15 @@ public class GiftCertificateDTO {
     private String description;
     private double price;
     private int duration;
-    private Date createDate;
-    private Date lastUpdateDate;
+    private String createDate;
+    private String lastUpdateDate;
 
     public GiftCertificateDTO() {
     }
 
     public GiftCertificateDTO(int id, String name, String description,
-                                 double price, int duration, Date createDate,
-                              Date lastUpdateDate) {
+                                 double price, int duration, String createDate,
+                              String lastUpdateDate) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -32,7 +32,7 @@ public class GiftCertificateDTO {
     }
 
     public GiftCertificateDTO(String name, String description, double price,
-                                 int duration, Date createDate, Date lastUpdateDate) {
+                                 int duration, String createDate, String lastUpdateDate) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -81,19 +81,19 @@ public class GiftCertificateDTO {
         this.duration = duration;
     }
 
-    public Date getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
-    public Date getLastUpdateDate() {
+    public String getLastUpdateDate() {
         return lastUpdateDate;
     }
 
-    public void setLastUpdateDate(Date lastUpdateDate) {
+    public void setLastUpdateDate(String lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 

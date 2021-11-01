@@ -4,9 +4,11 @@ import com.epam.esm.dto.GiftCertificateDTO;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.GiftTagService;
 import com.epam.esm.service.ServiceException;
-import com.epam.esm.util.JsonReader;
+import com.epam.esm.controller.util.JsonReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,12 +49,12 @@ public class GiftCertificateController {
         }
 
         giftCertificateService.updateCertificate(reader.getObjectsFromJSON(json));
-
     }
 
     @GetMapping("/all")
-    public List<GiftCertificateDTO> getAllCertificates() throws ServiceException{
-        return giftCertificateService.getAllCertificates();
+    public ResponseEntity<List<GiftCertificateDTO>> getAllCertificates() throws ServiceException{
+        List<GiftCertificateDTO> dtos = giftCertificateService.getAllCertificates();
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")

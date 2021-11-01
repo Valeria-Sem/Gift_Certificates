@@ -5,14 +5,12 @@ import com.epam.esm.converter.GiftTagConverter;
 import com.epam.esm.dto.GiftCertificateDTO;
 import com.epam.esm.dto.GiftTagDTO;
 import com.epam.esm.dto.TagDTO;
-import com.epam.esm.entity.GiftCertificateEntity;
 import com.epam.esm.dao.DAOException;
 import com.epam.esm.dao.GiftTagDAO;
 import com.epam.esm.service.GiftTagService;
 import com.epam.esm.service.ServiceException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.validator.TagValidator;
-import com.epam.esm.service.validator.Validator;
 import com.epam.esm.service.validator.ValidatorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,24 +30,26 @@ public class GiftTagServiceImpl implements GiftTagService {
 
     @Autowired
     public GiftTagServiceImpl(GiftTagDAO giftTagDAO, GiftCertificateConverter giftCertificateConverter,
-                              GiftTagConverter giftTagConverter, TagService tagService) {
+                              GiftTagConverter giftTagConverter, TagService tagService, TagValidator tagValidator) {
         this.giftTagDAO = giftTagDAO;
         this.giftCertificateConverter = giftCertificateConverter;
         this.giftTagConverter = giftTagConverter;
         this.tagService = tagService;
-        tagValidator = Validator.getInstance().getTagValidator();
+        this.tagValidator = tagValidator;
     }
 
     @Override
     public GiftTagDTO save(GiftTagDTO giftTagDTO) throws ServiceException {
         try{
+            tagValidator.validateGiftTag(giftTagDTO);
+
             if(tagService.getTagByName(giftTagDTO.getTagName()) == null){
                 TagDTO tagDTO = new TagDTO(giftTagDTO.getTagName());
                 tagService.save(tagDTO);
             }
 
            return giftTagConverter.mapToDto(giftTagDAO.save(giftTagConverter.mapToEntity(giftTagDTO)));
-        } catch (DAOException e){
+        } catch (DAOException | ValidatorException e){
             LOGGER.warn("some service problems with validate or saving gift-tag");
             throw new ServiceException(e);
         }
@@ -58,8 +58,10 @@ public class GiftTagServiceImpl implements GiftTagService {
     @Override
     public void delete(int id) throws ServiceException {
         try{
+            tagValidator.validateId(id);
+
             giftTagDAO.delete(id);
-        } catch (DAOException e){
+        } catch (DAOException | ValidatorException e){
             LOGGER.warn("some service problems with deleting gift-tag");
             throw new ServiceException(e);
         }

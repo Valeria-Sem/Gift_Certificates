@@ -23,7 +23,7 @@ public class GiftTagDAOImpl implements GiftTagDAO {
     private final String INSERT_QUERY = "insert into gift_tag(gift_id, tag_name) values(?, ?)";
     private final String DELETE_QUERY = "delete from gift_tag where id = ?";
     private final String SELECT_BY_NAME_QUERY = "select gift_certificate.* from gift_certificate, tag, gift_tag where " +
-            "gift_tag.gift_id = gift_certificate.id and gift_tag.tag_name = tag.name and tag.name = (?)";
+            "gift_tag.gift_id = gift_certificate.id and gift_tag.tag_name = tag.name and tag.name = ? order by gift_certificate.id asc";
     private final String SELECT_QUERY = "select * from gift_tag ORDER BY id DESC LIMIT 1";
 
 
@@ -36,19 +36,32 @@ public class GiftTagDAOImpl implements GiftTagDAO {
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, timeout = 360, rollbackFor = Exception.class)
     @Override
     public GiftTagEntity save(GiftTagEntity giftTagEntity) throws DAOException {
-        jdbcTemplate.update(INSERT_QUERY, giftTagEntity.getGiftId(), giftTagEntity.getTagName());
+        try{
+            jdbcTemplate.update(INSERT_QUERY, giftTagEntity.getGiftId(), giftTagEntity.getTagName());
 
-        return jdbcTemplate.query(SELECT_QUERY, new BeanPropertyRowMapper<>(GiftTagEntity.class))
-                .stream().findAny().orElse(null);
+            return jdbcTemplate.query(SELECT_QUERY, new BeanPropertyRowMapper<>(GiftTagEntity.class))
+                    .stream().findAny().orElse(null);
+
+        } catch (Exception e){
+            throw new DAOException("Some problems with saving giftTag");
+        }
     }
 
     @Override
     public void delete(int id) throws DAOException {
-        jdbcTemplate.update(DELETE_QUERY, id);
+        try{
+            jdbcTemplate.update(DELETE_QUERY, id);
+        } catch (Exception e){
+            throw new DAOException("Some problems with deleting giftTag");
+        }
     }
 
     @Override
     public List<GiftCertificateEntity> getCertificatesByTagName(String name) throws DAOException {
-        return jdbcTemplate.query(SELECT_BY_NAME_QUERY, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), name);
+        try{
+            return jdbcTemplate.query(SELECT_BY_NAME_QUERY, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), name);
+        } catch (Exception e){
+            throw new DAOException("Some problems with get Certificates By Tag Name");
+        }
     }
 }

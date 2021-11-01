@@ -39,25 +39,42 @@ public class TagDAOImpl implements TagDAO {
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, timeout = 360, rollbackFor = Exception.class)
     @Override
     public TagEntity save(TagEntity tag) throws DAOException {
-        jdbcTemplate.update(INSERT_QUERY, tag.getName());
+        try{
+            jdbcTemplate.update(INSERT_QUERY, tag.getName());
 
-        return jdbcTemplate.query(SELECT_QUERY, new BeanPropertyRowMapper<>(TagEntity.class))
-                .stream().findAny().orElse(null);
+            return jdbcTemplate.query(SELECT_QUERY, new BeanPropertyRowMapper<>(TagEntity.class))
+                    .stream().findAny().orElse(null);
+        } catch (Exception e){
+            throw new DAOException("Some problems with saving Tag");
+        }
     }
 
     @Override
     public void delete(int id) throws DAOException {
-        jdbcTemplate.update(DELETE_QUERY, id);
+        try{
+            jdbcTemplate.update(DELETE_QUERY, id);
+        } catch (Exception e){
+            throw new DAOException("Some problems with deleting Tag");
+        }
     }
 
     @Override
     public List<TagEntity> getAllTags() throws DAOException {
-        return jdbcTemplate.query(SELECT_ALL_QUERY, new BeanPropertyRowMapper<>(TagEntity.class));
+        try{
+            return jdbcTemplate.query(SELECT_ALL_QUERY, new BeanPropertyRowMapper<>(TagEntity.class));
+        } catch (Exception e){
+            throw new DAOException("Some problems with extracting Tags");
+        }
     }
 
     @Override
     public TagEntity getTagByName(String name) throws DAOException {
-        return jdbcTemplate.query(SELECT_BY_NAME_QUERY, new BeanPropertyRowMapper<>(TagEntity.class), name)
-                .stream().findAny().orElse(null);
+        try{
+            return jdbcTemplate.query(SELECT_BY_NAME_QUERY, new BeanPropertyRowMapper<>(TagEntity.class), name)
+                    .stream().findAny().orElse(null);
+        } catch (Exception e){
+            throw new DAOException("Some problems with extracting Tag by name");
+        }
+
     }
 }

@@ -24,9 +24,11 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
             " values(?, ?, ?, ?, ?, ?)";
     private final String DELETE_QUERY = "delete from gift_certificate where id = ?";
     private final String SELECT_ALL_QUERY = "select * from gift_certificate";
-    private final String SELECT_BY_PART_OF_NAME = "select * from gift_certificate where name like '%' + ? + '%'";
+    private final String SELECT_BY_PART_OF_NAME = "select * from gift_certificate where name like CONCAT( '%',?,'%')";
     private final String SELECT_SORT_ASC = "select * from gift_certificate order by name asc";
     private final String SELECT_QUERY = "select * from gift_certificate ORDER BY id DESC LIMIT 1";
+    private final String SELECT_BY_ID_QUERY = "select * from gift_certificate where id = ?";
+
 
     @Autowired
     public GiftCertificateDAOImpl(JdbcTemplate jdbcTemplate) {
@@ -36,22 +38,35 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, timeout = 360, rollbackFor = Exception.class)
     @Override
     public GiftCertificateEntity save(GiftCertificateEntity giftCertificate) throws DAOException{
-        jdbcTemplate.update(INSERT_QUERY, giftCertificate.getName(), giftCertificate.getDescription(),
-                giftCertificate.getPrice(), giftCertificate.getDuration(), giftCertificate.getCreateDate(),
-                giftCertificate.getLastUpdateDate());
+        try{
+            jdbcTemplate.update(INSERT_QUERY, giftCertificate.getName(), giftCertificate.getDescription(),
+                    giftCertificate.getPrice(), giftCertificate.getDuration(), giftCertificate.getCreateDate(),
+                    giftCertificate.getLastUpdateDate());
 
-        return jdbcTemplate.query(SELECT_QUERY, new BeanPropertyRowMapper<>(GiftCertificateEntity.class))
-                .stream().findAny().orElse(null);
+            return jdbcTemplate.query(SELECT_QUERY, new BeanPropertyRowMapper<>(GiftCertificateEntity.class))
+                    .stream().findAny().orElse(null);
+        } catch (Exception e){
+            throw new DAOException("Some problems with saving certificate");
+        }
+
     }
 
     @Override
     public void delete(int id) throws DAOException {
-        jdbcTemplate.update(DELETE_QUERY, id);
+        try{
+            jdbcTemplate.update(DELETE_QUERY, id);
+        } catch (Exception e){
+            throw new DAOException("Some problems with deleting certificate");
+        }
     }
 
     @Override
     public List<GiftCertificateEntity> getAllCertificates() throws DAOException {
-        return jdbcTemplate.query(SELECT_ALL_QUERY, new BeanPropertyRowMapper<>(GiftCertificateEntity.class));
+        try{
+            return jdbcTemplate.query(SELECT_ALL_QUERY, new BeanPropertyRowMapper<>(GiftCertificateEntity.class));
+        } catch (Exception e){
+            throw new DAOException("Some problems with extracting certificates");
+        }
     }
 
     @Override
@@ -70,17 +85,25 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
             });
         } catch (Exception e){
             LOGGER.error("some problems with updating Certificates");
-            throw new DAOException(e);
+            throw new DAOException("some problems with updating Certificates");
         }
     }
 
     @Override
     public List<GiftCertificateEntity> searchByPartOfCertificateName(String part) throws DAOException {
-       return jdbcTemplate.query(SELECT_BY_PART_OF_NAME, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), part);
+        try{
+            return jdbcTemplate.query(SELECT_BY_PART_OF_NAME, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), part);
+        } catch (Exception e){
+            throw new DAOException("Some problems with extracting certificates by part of name");
+        }
     }
 
     @Override
     public List<GiftCertificateEntity> sortByASC() throws DAOException {
-        return jdbcTemplate.query(SELECT_SORT_ASC, new BeanPropertyRowMapper<>(GiftCertificateEntity.class));
+        try{
+            return jdbcTemplate.query(SELECT_SORT_ASC, new BeanPropertyRowMapper<>(GiftCertificateEntity.class));
+        } catch (Exception e){
+            throw new DAOException("Some problems with extracting certificates");
+        }
     }
 }

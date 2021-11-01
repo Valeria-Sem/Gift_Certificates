@@ -1,4 +1,4 @@
-package com.epam.esm.util;
+package com.epam.esm.controller.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
