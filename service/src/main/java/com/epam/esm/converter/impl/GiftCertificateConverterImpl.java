@@ -5,6 +5,7 @@ import com.epam.esm.dto.GiftCertificateDTO;
 import com.epam.esm.entity.GiftCertificateEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

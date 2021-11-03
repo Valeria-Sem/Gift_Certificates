@@ -20,12 +20,20 @@ public class GiftTagDAOImpl implements GiftTagDAO {
     private final Logger LOGGER = Logger.getLogger(GiftTagDAOImpl.class);
     private final JdbcTemplate jdbcTemplate;
 
-    private final String INSERT_QUERY = "insert into gift_tag(gift_id, tag_name) values(?, ?)";
+    private final String INSERT_QUERY = "insert into gift_tag(gift_id, tag_id) values(?, (select id from tag where name = ?))";
     private final String DELETE_QUERY = "delete from gift_tag where id = ?";
-    private final String SELECT_BY_NAME_QUERY = "select gift_certificate.* from gift_certificate, tag, gift_tag where " +
-            "gift_tag.gift_id = gift_certificate.id and gift_tag.tag_name = tag.name and tag.name = ? order by gift_certificate.id asc";
+    private final String SELECT_BY_TAG_NAME_QUERY = "select gift_certificate.* from gift_certificate, tag, gift_tag where " +
+            "gift_tag.gift_id = gift_certificate.id and gift_tag.tag_id = tag.id and tag.name = ? order by gift_certificate.id asc";
     private final String SELECT_QUERY = "select * from gift_tag ORDER BY id DESC LIMIT 1";
-
+    private final String SELECT_QUERY_BY_PART_AND_TAG_AND_SORT = "select gift_certificate.* from gift_certificate, tag, gift_tag where " +
+            "gift_tag.gift_id = gift_certificate.id and gift_tag.tag_id = tag.id and tag.name = ? " +
+            "and gift_certificate.name like CONCAT( '%',?,'%') order by gift_certificate.name ";
+    private final String SELECT_QUERY_BY_PART_AND_TAG = "select gift_certificate.* from gift_certificate, tag, gift_tag where "+
+            "gift_tag.gift_id = gift_certificate.id and gift_tag.tag_id = tag.id and tag.name = ? " +
+            "and gift_certificate.name like CONCAT( '%',?,'%')";
+    private final String SELECT_QUERY_BY_TAG_AND_SORT = "select gift_certificate.* from gift_certificate, tag, gift_tag where " +
+            "gift_tag.gift_id = gift_certificate.id and gift_tag.tag_id = tag.id and tag.name = ? " +
+            "order by gift_certificate.name ";
 
 
     @Autowired
@@ -35,9 +43,9 @@ public class GiftTagDAOImpl implements GiftTagDAO {
 
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, timeout = 360, rollbackFor = Exception.class)
     @Override
-    public GiftTagEntity save(GiftTagEntity giftTagEntity) throws DAOException {
+    public GiftTagEntity save(int idCertificate, String tagName) throws DAOException {
         try{
-            jdbcTemplate.update(INSERT_QUERY, giftTagEntity.getGiftId(), giftTagEntity.getTagName());
+            jdbcTemplate.update(INSERT_QUERY, idCertificate, tagName);
 
             return jdbcTemplate.query(SELECT_QUERY, new BeanPropertyRowMapper<>(GiftTagEntity.class))
                     .stream().findAny().orElse(null);
@@ -59,9 +67,36 @@ public class GiftTagDAOImpl implements GiftTagDAO {
     @Override
     public List<GiftCertificateEntity> getCertificatesByTagName(String name) throws DAOException {
         try{
-            return jdbcTemplate.query(SELECT_BY_NAME_QUERY, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), name);
+            return jdbcTemplate.query(SELECT_BY_TAG_NAME_QUERY, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), name);
         } catch (Exception e){
             throw new DAOException("Some problems with get Certificates By Tag Name");
+        }
+    }
+
+    @Override
+    public List<GiftCertificateEntity> searchAndSortByPartOfCertificateNameAndTag(String part, String tag, String sort) throws DAOException {
+        try{
+            return jdbcTemplate.query(SELECT_QUERY_BY_PART_AND_TAG_AND_SORT + sort, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), tag, part);
+        } catch (Exception e){
+            throw new DAOException("Some problems with extracting certificates");
+        }
+    }
+
+    @Override
+    public List<GiftCertificateEntity> searchByPartAndTag(String part, String tag) throws DAOException {
+        try{
+            return jdbcTemplate.query(SELECT_QUERY_BY_PART_AND_TAG, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), tag, part);
+        } catch (Exception e){
+            throw new DAOException("Some problems with extracting certificates");
+        }
+    }
+
+    @Override
+    public List<GiftCertificateEntity> searchAndSortByTag(String tag, String sort) throws DAOException {
+        try{
+            return jdbcTemplate.query(SELECT_QUERY_BY_TAG_AND_SORT + sort, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), tag);
+        } catch (Exception e){
+            throw new DAOException("Some problems with extracting certificates");
         }
     }
 }

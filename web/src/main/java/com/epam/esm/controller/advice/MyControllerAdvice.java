@@ -36,6 +36,6 @@ public class MyControllerAdvice {
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<String> handleInvalidData(NullPointerException validatorException){
-        return new ResponseEntity<String>("Data not found!", HttpStatus.valueOf("404"));
+        return new ResponseEntity<String>("Data not found!", HttpStatus.valueOf("500"));
     }
 }

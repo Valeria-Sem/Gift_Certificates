@@ -4,7 +4,6 @@ import com.epam.esm.converter.GiftCertificateConverter;
 import com.epam.esm.dto.GiftCertificateDTO;
 import com.epam.esm.dao.DAOException;
 import com.epam.esm.dao.GiftCertificateDAO;
-import com.epam.esm.entity.GiftCertificateEntity;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.ServiceException;
 import com.epam.esm.service.validator.GiftCertificateValidator;
@@ -91,9 +90,19 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificateDTO> sortByASC() throws ServiceException {
+    public List<GiftCertificateDTO> sort(String sort) throws ServiceException {
         try{
-            return converter.mapToDto(giftCertificateDAO.sortByASC());
+            return converter.mapToDto(giftCertificateDAO.sort(sort));
+        } catch ( DAOException e){
+            LOGGER.warn("some service problems with extracting certificates");
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<GiftCertificateDTO> searchAndSortByPartOfCertificateName(String part, String sort) throws ServiceException {
+        try{
+            return converter.mapToDto(giftCertificateDAO.searchAndSortByPartOfCertificateName(part, sort));
         } catch ( DAOException e){
             LOGGER.warn("some service problems with extracting certificates");
             throw new ServiceException(e);

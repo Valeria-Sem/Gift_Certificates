@@ -6,7 +6,11 @@ import com.epam.esm.entity.GiftTagEntity;
 import java.util.List;
 
 public interface GiftTagDAO {
-    public GiftTagEntity save(GiftTagEntity giftTagEntity) throws DAOException;
+    public GiftTagEntity save(int idCertificate, String tagName) throws DAOException;
     public void delete (int id) throws DAOException;
     public List<GiftCertificateEntity> getCertificatesByTagName (String name) throws DAOException;
+    public List<GiftCertificateEntity> searchAndSortByPartOfCertificateNameAndTag (String part, String tag, String sort) throws DAOException;
+    public List<GiftCertificateEntity> searchByPartAndTag(String part, String tag) throws DAOException;
+    public List<GiftCertificateEntity> searchAndSortByTag (String tag, String sort) throws DAOException;
+
 }

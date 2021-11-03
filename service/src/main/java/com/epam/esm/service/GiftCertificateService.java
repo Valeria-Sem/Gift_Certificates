@@ -11,6 +11,8 @@ public interface GiftCertificateService {
     public List<GiftCertificateDTO> getAllCertificates() throws ServiceException;
     public void updateCertificate(HashMap updateParams) throws ServiceException;
     public List<GiftCertificateDTO> searchByPartOfCertificateName(String part) throws ServiceException;
-    public List<GiftCertificateDTO> sortByASC() throws ServiceException;
+    public List<GiftCertificateDTO> sort(String sort) throws ServiceException;
+    public List<GiftCertificateDTO> searchAndSortByPartOfCertificateName(String part, String sort) throws ServiceException;
+
 
 }

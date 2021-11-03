@@ -11,5 +11,6 @@ public interface GiftCertificateDAO {
     public List<GiftCertificateEntity> getAllCertificates () throws DAOException;
     public void updateCertificate (HashMap updateParams) throws DAOException;
     public List<GiftCertificateEntity> searchByPartOfCertificateName (String part) throws DAOException;
-    public List<GiftCertificateEntity> sortByASC () throws DAOException;
+    public List<GiftCertificateEntity> sort(String sort) throws DAOException;
+    public List<GiftCertificateEntity> searchAndSortByPartOfCertificateName (String part, String sort) throws DAOException;
 }

@@ -25,9 +25,9 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     private final String DELETE_QUERY = "delete from gift_certificate where id = ?";
     private final String SELECT_ALL_QUERY = "select * from gift_certificate";
     private final String SELECT_BY_PART_OF_NAME = "select * from gift_certificate where name like CONCAT( '%',?,'%')";
-    private final String SELECT_SORT_ASC = "select * from gift_certificate order by name asc";
+    private final String SELECT_SORT = "select * from gift_certificate order by name ";
     private final String SELECT_QUERY = "select * from gift_certificate ORDER BY id DESC LIMIT 1";
-    private final String SELECT_BY_ID_QUERY = "select * from gift_certificate where id = ?";
+    private final String SELECT_BY_PART_AND_SORT = "select * from gift_certificate where name like CONCAT( '%',?,'%') order by name ";
 
 
     @Autowired
@@ -99,9 +99,18 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     }
 
     @Override
-    public List<GiftCertificateEntity> sortByASC() throws DAOException {
+    public List<GiftCertificateEntity> sort(String sort) throws DAOException {
         try{
-            return jdbcTemplate.query(SELECT_SORT_ASC, new BeanPropertyRowMapper<>(GiftCertificateEntity.class));
+            return jdbcTemplate.query(SELECT_SORT + sort, new BeanPropertyRowMapper<>(GiftCertificateEntity.class));
+        } catch (Exception e){
+            throw new DAOException("Some problems with extracting certificates");
+        }
+    }
+
+    @Override
+    public List<GiftCertificateEntity> searchAndSortByPartOfCertificateName (String part, String sort) throws DAOException {
+        try{
+            return jdbcTemplate.query(SELECT_BY_PART_AND_SORT + sort, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), part);
         } catch (Exception e){
             throw new DAOException("Some problems with extracting certificates");
         }

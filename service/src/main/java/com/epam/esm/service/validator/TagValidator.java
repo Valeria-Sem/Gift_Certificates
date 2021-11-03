@@ -9,13 +9,9 @@ public class TagValidator {
     private static final String TAG_REGEX = "[a-zA-Z]{3,}";
     private static final String INTEGER_REGEX_PATTERN = "\\d+";
 
-    public void validateGiftTag(GiftTagDTO giftTagDTO) throws ValidatorException {
-        if(giftTagDTO == null){
-            throw new ValidatorException("service.validationCommonError");
-        }
-
-        validateTagName(giftTagDTO.getTagName());
-        validateId(giftTagDTO.getGiftId());
+    public void validateGiftTag(int idCertificate, String tagName) throws ValidatorException {
+        validateTagName(tagName);
+        validateId(idCertificate);
 
     }
 
