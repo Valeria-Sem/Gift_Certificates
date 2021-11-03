@@ -9,20 +9,20 @@ import java.util.Objects;
 public class GiftTagDTO {
     private int id;
     private int giftId;
-    private String tagName;
+    private int tagId;
 
     public GiftTagDTO() {
     }
 
-    public GiftTagDTO(int id, int giftId, String tagName) {
+    public GiftTagDTO(int id, int giftId, int tagId) {
         this.id = id;
         this.giftId = giftId;
-        this.tagName = tagName;
+        this.tagId = tagId;
     }
 
-    public GiftTagDTO(int giftId, String tagName) {
+    public GiftTagDTO(int giftId, int tagId) {
         this.giftId = giftId;
-        this.tagName = tagName;
+        this.tagId = tagId;
     }
 
     public int getId() {
@@ -41,12 +41,12 @@ public class GiftTagDTO {
         this.giftId = giftId;
     }
 
-    public String getTagName() {
-        return tagName;
+    public int getTagId() {
+        return tagId;
     }
 
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
+    public void setTagId(int tagId) {
+        this.tagId = tagId;
     }
 
     @Override
@@ -54,12 +54,12 @@ public class GiftTagDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GiftTagDTO that = (GiftTagDTO) o;
-        return id == that.id && giftId == that.giftId && tagName.equals(that.tagName);
+        return id == that.id && giftId == that.giftId && tagId == that.tagId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, giftId, tagName);
+        return Objects.hash(id, giftId, tagId);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class GiftTagDTO {
         return "GiftTagDTO{" +
                 "id=" + id +
                 ", giftId=" + giftId +
-                ", tagName='" + tagName + '\'' +
+                ", tagId=" + tagId +
                 '}';
     }
 }

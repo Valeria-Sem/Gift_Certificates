@@ -64,8 +64,8 @@ public class GiftCertificateController {
     }
 
     @PostMapping("/assignTag")
-    public GiftTagDTO assignTag(@RequestBody int idCertificate, @RequestBody String tagName) throws ServiceException{
-        return giftTagService.save(idCertificate, tagName);
+    public GiftTagDTO assignTag(@RequestBody int giftId, @RequestBody String tagName) throws ServiceException{
+        return giftTagService.save(giftId, tagName);
     }
 
     @GetMapping(value = {"/search/{part}",

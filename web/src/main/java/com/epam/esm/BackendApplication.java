@@ -1,9 +1,8 @@
 package com.epam.esm;
 
 import com.epam.esm.config.SpringConfig;
-import com.epam.esm.controller.GiftCertificateController;
-import com.epam.esm.controller.TagController;
-import com.epam.esm.service.ServiceException;
+//import com.epam.esm.controller.TagController;
+//import com.epam.esm.service.ServiceException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 //import javax.servlet.http.HttpServletRequest;
