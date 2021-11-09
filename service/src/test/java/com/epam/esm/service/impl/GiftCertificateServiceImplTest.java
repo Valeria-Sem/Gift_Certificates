@@ -90,5 +90,6 @@ class GiftCertificateServiceImplTest {
 //        List<GiftCertificateDTO> list = new ArrayList<>();
 //
 //        when(giftCertificateService.searchAndSortByPartOfCertificateName("n", "asc")).thenReturn(list);
+//
 //    }
 }
