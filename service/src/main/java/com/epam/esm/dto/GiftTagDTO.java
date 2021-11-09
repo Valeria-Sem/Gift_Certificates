@@ -1,6 +1,5 @@
 package com.epam.esm.dto;
 
-import com.epam.esm.entity.GiftTagEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;

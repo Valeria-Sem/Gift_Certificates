@@ -13,11 +13,10 @@
       <module>service</module>
       <module>dao</module>
     </modules>
+
     <packaging>pom</packaging>
 
   <name>Gift_Certificates</name>
-<!--  &lt;!&ndash; FIXME change it to the project's website &ndash;&gt;-->
-<!--  <url>http://www.example.com</url>-->
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -142,14 +141,6 @@
     </dependency>
 
   </dependencies>
-
-<!--  <packaging>pom</packaging>-->
-
-<!--  <modules>-->
-<!--    <module>backend</module>-->
-<!--    <module>fapi</module>-->
-<!--  </modules>-->
-
 
 
   <build>

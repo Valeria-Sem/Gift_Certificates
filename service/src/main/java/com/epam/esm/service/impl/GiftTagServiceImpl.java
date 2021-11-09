@@ -3,7 +3,6 @@ package com.epam.esm.service.impl;
 import com.epam.esm.converter.GiftCertificateConverter;
 import com.epam.esm.converter.GiftTagConverter;
 import com.epam.esm.dto.GiftCertificateDTO;
-import com.epam.esm.dto.GiftTagDTO;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.dao.DAOException;
 import com.epam.esm.dao.GiftTagDAO;
@@ -16,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -39,17 +39,21 @@ public class GiftTagServiceImpl implements GiftTagService {
     }
 
     @Override
-    public GiftTagDTO save(int idCertificate, String tagName) throws ServiceException {
+    public void save(GiftCertificateDTO giftCertificate) throws ServiceException {
         try{
-            tagValidator.validateGiftTag(idCertificate, tagName);
+//            tagValidator.validateGiftTag(idCertificate, tagName);
 
-            if(tagService.getTagByName(tagName) == null){
-                TagDTO tagDTO = new TagDTO(tagName);
-                tagService.save(tagDTO);
+            if(!giftCertificate.getTags().isEmpty()){
+                for(String tagName: giftCertificate.getTags()){
+                    if(tagService.getTagByName(tagName) == null){
+                        TagDTO tagDTO = new TagDTO(tagName);
+                        tagService.save(tagDTO);
+                    }
+                    giftTagConverter.mapToDto(giftTagDAO.save(giftCertificate.getId(), tagName));
+                }
             }
 
-           return giftTagConverter.mapToDto(giftTagDAO.save(idCertificate, tagName));
-        } catch (DAOException | ValidatorException e){
+        } catch (DAOException e){
             LOGGER.warn("some service problems with validate or saving gift-tag");
             throw new ServiceException(e);
         }
@@ -79,33 +83,44 @@ public class GiftTagServiceImpl implements GiftTagService {
         }
     }
 
+//    @Override
+//    public List<GiftCertificateDTO> searchAndSortByPartOfCertificateNameAndTag(String part, String tag, String sort) throws ServiceException {
+//        try{
+//
+//            return giftCertificateConverter.mapToDto(giftTagDAO.searchAndSortByPartOfCertificateNameAndTag(part, tag, sort));
+//        } catch (DAOException e){
+//            LOGGER.warn("some service problems with extracting tags");
+//            throw new ServiceException(e);
+//        }
+//    }
+//
+//    @Override
+//    public List<GiftCertificateDTO> searchByPartAndTag(String part, String tag) throws ServiceException {
+//        try{
+//
+//            return giftCertificateConverter.mapToDto(giftTagDAO.searchByPartAndTag(part, tag));
+//        } catch (DAOException e){
+//            LOGGER.warn("some service problems with extracting tags");
+//            throw new ServiceException(e);
+//        }
+//    }
+//
+//    @Override
+//    public List<GiftCertificateDTO> searchAndSortByTag(String tag, String sort) throws ServiceException {
+//        try{
+//
+//            return giftCertificateConverter.mapToDto(giftTagDAO.searchAndSortByTag(tag, sort));
+//        } catch (DAOException e){
+//            LOGGER.warn("some service problems with extracting tags");
+//            throw new ServiceException(e);
+//        }
+//    }
+
     @Override
-    public List<GiftCertificateDTO> searchAndSortByPartOfCertificateNameAndTag(String part, String tag, String sort) throws ServiceException {
+    public List<GiftCertificateDTO> search(HashMap properties) throws ServiceException {
         try{
 
-            return giftCertificateConverter.mapToDto(giftTagDAO.searchAndSortByPartOfCertificateNameAndTag(part, tag, sort));
-        } catch (DAOException e){
-            LOGGER.warn("some service problems with extracting tags");
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public List<GiftCertificateDTO> searchByPartAndTag(String part, String tag) throws ServiceException {
-        try{
-
-            return giftCertificateConverter.mapToDto(giftTagDAO.searchByPartAndTag(part, tag));
-        } catch (DAOException e){
-            LOGGER.warn("some service problems with extracting tags");
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public List<GiftCertificateDTO> searchAndSortByTag(String tag, String sort) throws ServiceException {
-        try{
-
-            return giftCertificateConverter.mapToDto(giftTagDAO.searchAndSortByTag(tag, sort));
+            return giftCertificateConverter.mapToDto(giftTagDAO.search(properties));
         } catch (DAOException e){
             LOGGER.warn("some service problems with extracting tags");
             throw new ServiceException(e);

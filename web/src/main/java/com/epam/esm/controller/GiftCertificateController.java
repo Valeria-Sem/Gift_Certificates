@@ -14,27 +14,54 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Valeria
+ * This is GiftCertificateController. All http requests related to certificates will come here and be processed.
+ */
 @RestController
 @RequestMapping( path = "/api/giftCertificate")
 public class GiftCertificateController {
+    /**
+     * This is GiftCertificateService field where the link to the corresponding service will be placed
+     */
     private final GiftCertificateService giftCertificateService;
+
+    /**
+     * This is GiftTagService field where the link to the corresponding service will be placed
+     */
     private final GiftTagService giftTagService;
 
+    /**
+     * This is GiftCertificateController constructor for initialization of the class
+     * @param giftCertificateService link to the corresponding service
+     * @param giftTagService link to the corresponding service
+     */
     @Autowired
     public GiftCertificateController(GiftCertificateService giftCertificateService, GiftTagService giftTagService){
         this.giftCertificateService = giftCertificateService;
         this.giftTagService = giftTagService;
     }
 
+    /**
+     * Method for saving new GiftCertificateDTO
+     * @param giftCertificateDTO object for saving into DB
+     * @return GiftCertificateDTO object
+     * @throws ServiceException if something goes wrong will be thrown
+     */
     @PostMapping
-    public GiftCertificateDTO save(@RequestBody GiftCertificateDTO giftCertificateBean) throws ServiceException{
-       return giftCertificateService.save(giftCertificateBean);
+    public GiftCertificateDTO save(@RequestBody GiftCertificateDTO giftCertificateDTO) throws ServiceException{
+       return giftCertificateService.save(giftCertificateDTO);
     }
 
-
+    /**
+     * Method for updating GiftCertificateDTO
+     * @param request http link where stored json with parameters for updating
+     * @throws ServiceException if something goes wrong will be thrown
+     */
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, path ="/update")
     public void updateCertificate(HttpServletRequest request) throws ServiceException{
         JsonReader reader = new JsonReader();
@@ -52,58 +79,86 @@ public class GiftCertificateController {
         giftCertificateService.updateCertificate(reader.getObjectsFromJSON(json));
     }
 
-    @GetMapping()
+    /**
+     * Method for getting all Gift Certificates
+     * @return List with all GiftCertificates
+     * @throws ServiceException if something goes wrong will be thrown
+     */
+    @GetMapping
     public ResponseEntity<List<GiftCertificateDTO>> getAllCertificates() throws ServiceException{
-        List<GiftCertificateDTO> dtos = giftCertificateService.getAllCertificates();
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
+        List<GiftCertificateDTO> GiftCertificateDTOs = giftCertificateService.getAllCertificates();
+        return new ResponseEntity<>(GiftCertificateDTOs, HttpStatus.OK);
     }
 
+    /**
+     * Method for deleting GiftCertificate
+     * @param id certificate ID
+     * @throws ServiceException if something goes wrong will be thrown
+     */
     @DeleteMapping("/delete/{id}")
     public void deleteGiftCertificate(@PathVariable(name = "id") int id) throws ServiceException{
         giftCertificateService.delete(id);
     }
 
-    @PostMapping("/assignTag")
-    public GiftTagDTO assignTag(@RequestBody int giftId, @RequestBody String tagName) throws ServiceException{
-        return giftTagService.save(giftId, tagName);
+    /**
+     * Method for assign Tag to Certificate
+//     * @param idCertificate certificate ID
+//     * @param tagName tag name
+//     * @return new GiftTagDTO
+     * @throws ServiceException if something goes wrong will be thrown
+     */
+    @PostMapping("/addTag")
+    public void assignTagToCertificate(@RequestBody GiftCertificateDTO giftCertificateDTO) throws ServiceException{
+        giftTagService.save(giftCertificateDTO);
     }
 
-    @GetMapping(value = {"/search/{part}",
-            "/search/{part}/{sort}",
-            "/search/{part}/byTag/{tag}",
-            "/search/{part}/byTag/{tag}/{sort}",
-            "/search/byTag/{tag}",
-            "/search/byTag/{tag}/{sort}",
-            "/{sort}"})
-    public List<GiftCertificateDTO> search(@PathVariable(name = "part", required = false) String part,
-                                           @PathVariable(name = "tag", required = false) String tag,
-                                           @PathVariable(name = "sort", required = false) String sort) throws ServiceException{
-        if(part != null && tag != null && sort != null){
-            return giftTagService.searchAndSortByPartOfCertificateNameAndTag(part, tag, sort);
+    /**
+     * Method for search and sort among the certificates
+     * @param part part of certificate name
+     * @param tag name of tag
+     * @param sort sort ASC/DESC
+     * @return List of Certificates
+     * @throws ServiceException if something goes wrong will be thrown
+     */
+    @GetMapping(value = {"/search"})
+    public List<GiftCertificateDTO> search(@RequestParam(name = "part", required = false) String part,
+                                           @RequestParam(name = "tag", required = false) String tag,
+                                           @RequestParam(name = "sort", required = false) String sort) throws ServiceException{
+//        if(part != null && tag != null && sort != null){
+//            return giftTagService.searchAndSortByPartOfCertificateNameAndTag(part, tag, sort);
+//
+//        } else if(part != null && tag != null){
+//            return giftTagService.searchByPartAndTag(part, tag);
+//
+//        } else if(part != null && sort != null){
+//            return giftCertificateService.searchAndSortByPartOfCertificateName(part, sort);
+//
+//        } else if(part != null){
+//            return giftCertificateService.searchByPartOfCertificateName(part);
+//
+//        } else if(tag != null && sort != null){
+//            return giftTagService.searchAndSortByTag(tag, sort);
+//
+//        } else if(tag != null){
+//            return giftTagService.getCertificatesByTagName(tag);
+//
+//        } else if(sort != null) {
+//            return giftCertificateService.sort(sort);
+//        }
 
-        } else if(part != null && tag != null){
-            return giftTagService.searchByPartAndTag(part, tag);
+        HashMap properties = new HashMap<>();
+        properties.put("part", part);
+        properties.put("tag", tag);
+        properties.put("sort", sort);
 
-        } else if(part != null && sort != null){
-            return giftCertificateService.searchAndSortByPartOfCertificateName(part, sort);
-
-        } else if(part != null){
-            return giftCertificateService.searchByPartOfCertificateName(part);
-
-        } else if(tag != null && sort != null){
-            return giftTagService.searchAndSortByTag(tag, sort);
-
-        } else if(tag != null){
-            return giftTagService.getCertificatesByTagName(tag);
-
-        } else if(sort != null){
-            return giftCertificateService.sort(sort);
-        }
-
-        return giftCertificateService.getAllCertificates();
+        return giftTagService.search(properties);
     }
 
-
+    /**
+     * Method for deleting relationship between certificate and tag
+     * @param id giftTag ID
+     * @throws ServiceException if something goes wrong will be thrown
+     */
     @DeleteMapping("/delete/giftTag/{id}")
     public void delete(@PathVariable(name = "id") int id) throws ServiceException {
         giftTagService.delete(id);

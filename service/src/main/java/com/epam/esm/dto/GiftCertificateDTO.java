@@ -2,6 +2,7 @@ package com.epam.esm.dto;
 
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -13,14 +14,37 @@ public class GiftCertificateDTO {
     private int duration;
     private String createDate;
     private String lastUpdateDate;
+    private List<String> tags;
 
     public GiftCertificateDTO() {
     }
 
     public GiftCertificateDTO(int id, String name, String description,
                                  double price, int duration, String createDate,
-                              String lastUpdateDate) {
+                              String lastUpdateDate, List<String> tags) {
         this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.duration = duration;
+        this.createDate = createDate;
+        this.lastUpdateDate = lastUpdateDate;
+        this.tags = tags;
+    }
+
+    public GiftCertificateDTO(String name, String description, double price,
+                                 int duration, String createDate, String lastUpdateDate, List<String> tags) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.duration = duration;
+        this.createDate = createDate;
+        this.lastUpdateDate = lastUpdateDate;
+        this.tags = tags;
+    }
+
+    public GiftCertificateDTO(String name, String description, double price,
+                              int duration, String createDate, String lastUpdateDate) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -30,13 +54,20 @@ public class GiftCertificateDTO {
     }
 
     public GiftCertificateDTO(String name, String description, double price,
-                                 int duration, String createDate, String lastUpdateDate) {
+                              int duration) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.duration = duration;
-        this.createDate = createDate;
-        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public GiftCertificateDTO(String name, String description, double price,
+                              int duration, List<String> tags) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.duration = duration;
+        this.tags = tags;
     }
 
     public int getId() {
@@ -95,22 +126,25 @@ public class GiftCertificateDTO {
         this.lastUpdateDate = lastUpdateDate;
     }
 
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        GiftCertificateDTO that = (GiftCertificateDTO) o;
-        return id == that.id && Double.compare(that.price, price) == 0
-                && duration == that.duration
-                && name.equals(that.name)
-                && description.equals(that.description)
-                && createDate.equals(that.createDate)
-                && lastUpdateDate.equals(that.lastUpdateDate);
+        GiftCertificateDTO dto = (GiftCertificateDTO) o;
+        return id == dto.id && Double.compare(dto.price, price) == 0 && duration == dto.duration && name.equals(dto.name) && description.equals(dto.description) && createDate.equals(dto.createDate) && lastUpdateDate.equals(dto.lastUpdateDate) && tags.equals(dto.tags);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, price, duration, createDate, lastUpdateDate);
+        return Objects.hash(id, name, description, price, duration, createDate, lastUpdateDate, tags);
     }
 
     @Override
@@ -123,6 +157,7 @@ public class GiftCertificateDTO {
                 ", duration=" + duration +
                 ", createDate='" + createDate + '\'' +
                 ", lastUpdateDate='" + lastUpdateDate + '\'' +
+                ", tags=" + tags +
                 '}';
     }
 }

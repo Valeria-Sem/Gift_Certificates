@@ -89,30 +89,30 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
         }
     }
 
-    @Override
-    public List<GiftCertificateEntity> searchByPartOfCertificateName(String part) throws DAOException {
-        try{
-            return jdbcTemplate.query(SELECT_BY_PART_OF_NAME, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), part);
-        } catch (Exception e){
-            throw new DAOException("Some problems with extracting certificates by part of name");
-        }
-    }
-
-    @Override
-    public List<GiftCertificateEntity> sort(String sort) throws DAOException {
-        try{
-            return jdbcTemplate.query(SELECT_SORT + sort, new BeanPropertyRowMapper<>(GiftCertificateEntity.class));
-        } catch (Exception e){
-            throw new DAOException("Some problems with extracting certificates");
-        }
-    }
-
-    @Override
-    public List<GiftCertificateEntity> searchAndSortByPartOfCertificateName (String part, String sort) throws DAOException {
-        try{
-            return jdbcTemplate.query(SELECT_BY_PART_AND_SORT + sort, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), part);
-        } catch (Exception e){
-            throw new DAOException("Some problems with extracting certificates");
-        }
-    }
+//    @Override
+//    public List<GiftCertificateEntity> searchByPartOfCertificateName(String part) throws DAOException {
+//        try{
+//            return jdbcTemplate.query(SELECT_BY_PART_OF_NAME, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), part);
+//        } catch (Exception e){
+//            throw new DAOException("Some problems with extracting certificates by part of name");
+//        }
+//    }
+//
+//    @Override
+//    public List<GiftCertificateEntity> sort(String sort) throws DAOException {
+//        try{
+//            return jdbcTemplate.query(SELECT_SORT + sort, new BeanPropertyRowMapper<>(GiftCertificateEntity.class));
+//        } catch (Exception e){
+//            throw new DAOException("Some problems with extracting certificates");
+//        }
+//    }
+//
+//    @Override
+//    public List<GiftCertificateEntity> searchAndSortByPartOfCertificateName (String part, String sort) throws DAOException {
+//        try{
+//            return jdbcTemplate.query(SELECT_BY_PART_AND_SORT + sort, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), part);
+//        } catch (Exception e){
+//            throw new DAOException("Some problems with extracting certificates");
+//        }
+//    }
 }

@@ -4,11 +4,13 @@ import com.epam.esm.dto.GiftCertificateDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 @Component
 public class GiftCertificateValidator {
-    private static final String NAME_REGEX_PATTERN = "[a-zA-Z ]* {3,}";
+    private static final String NAME_REGEX_PATTERN = "[a-zA-Z] {3,}";
     private static final String PART_OF_NAME_REGEX_PATTERN = "[a-zA-Z]{1,}";
     private static final String DATE_REGEX_PATTERN = "(\\d{4})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])";
     private static final String DOUBLE_REGEX_PATTERN = "[0-9]+(\\.){0,1}[0-9]*";
@@ -23,7 +25,7 @@ public class GiftCertificateValidator {
         validateDescription(giftCertificate.getDescription());
         validateDuration(giftCertificate.getDuration());
         validatePrice(giftCertificate.getPrice());
-        validateDates(giftCertificate.getCreateDate(), giftCertificate.getLastUpdateDate());
+//        validateDates(giftCertificate.getCreateDate(), giftCertificate.getLastUpdateDate());
     }
 
     public void validateUpdateData(HashMap updateParams) throws ValidatorException {

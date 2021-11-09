@@ -1,0 +1,3 @@
+CREATE TABLE gift_tag_m ENGINE=MEMORY
+SELECT *
+FROM gift_tag GROUP BY id;
