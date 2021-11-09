@@ -1,7 +1,6 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.dto.GiftCertificateDTO;
-import com.epam.esm.dto.GiftTagDTO;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.GiftTagService;
 import com.epam.esm.service.ServiceException;
@@ -101,18 +100,6 @@ public class GiftCertificateController {
     }
 
     /**
-     * Method for assign Tag to Certificate
-//     * @param idCertificate certificate ID
-//     * @param tagName tag name
-//     * @return new GiftTagDTO
-     * @throws ServiceException if something goes wrong will be thrown
-     */
-    @PostMapping("/addTag")
-    public void assignTagToCertificate(@RequestBody GiftCertificateDTO giftCertificateDTO) throws ServiceException{
-        giftTagService.save(giftCertificateDTO);
-    }
-
-    /**
      * Method for search and sort among the certificates
      * @param part part of certificate name
      * @param tag name of tag
@@ -124,28 +111,6 @@ public class GiftCertificateController {
     public List<GiftCertificateDTO> search(@RequestParam(name = "part", required = false) String part,
                                            @RequestParam(name = "tag", required = false) String tag,
                                            @RequestParam(name = "sort", required = false) String sort) throws ServiceException{
-//        if(part != null && tag != null && sort != null){
-//            return giftTagService.searchAndSortByPartOfCertificateNameAndTag(part, tag, sort);
-//
-//        } else if(part != null && tag != null){
-//            return giftTagService.searchByPartAndTag(part, tag);
-//
-//        } else if(part != null && sort != null){
-//            return giftCertificateService.searchAndSortByPartOfCertificateName(part, sort);
-//
-//        } else if(part != null){
-//            return giftCertificateService.searchByPartOfCertificateName(part);
-//
-//        } else if(tag != null && sort != null){
-//            return giftTagService.searchAndSortByTag(tag, sort);
-//
-//        } else if(tag != null){
-//            return giftTagService.getCertificatesByTagName(tag);
-//
-//        } else if(sort != null) {
-//            return giftCertificateService.sort(sort);
-//        }
-
         HashMap properties = new HashMap<>();
         properties.put("part", part);
         properties.put("tag", tag);

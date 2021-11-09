@@ -1,6 +1,5 @@
 package com.epam.esm.service.validator;
 
-import com.epam.esm.dto.GiftTagDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 

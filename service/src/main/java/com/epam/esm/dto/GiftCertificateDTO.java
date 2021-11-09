@@ -14,14 +14,14 @@ public class GiftCertificateDTO {
     private int duration;
     private String createDate;
     private String lastUpdateDate;
-    private List<String> tags;
+    private List<TagDTO> tags;
 
     public GiftCertificateDTO() {
     }
 
     public GiftCertificateDTO(int id, String name, String description,
                                  double price, int duration, String createDate,
-                              String lastUpdateDate, List<String> tags) {
+                              String lastUpdateDate, List<TagDTO> tags) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -33,7 +33,7 @@ public class GiftCertificateDTO {
     }
 
     public GiftCertificateDTO(String name, String description, double price,
-                                 int duration, String createDate, String lastUpdateDate, List<String> tags) {
+                                 int duration, String createDate, String lastUpdateDate, List<TagDTO> tags) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -62,7 +62,7 @@ public class GiftCertificateDTO {
     }
 
     public GiftCertificateDTO(String name, String description, double price,
-                              int duration, List<String> tags) {
+                              int duration, List<TagDTO> tags) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -126,11 +126,11 @@ public class GiftCertificateDTO {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public List<String> getTags() {
+    public List<TagDTO> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(List<TagDTO> tags) {
         this.tags = tags;
     }
 

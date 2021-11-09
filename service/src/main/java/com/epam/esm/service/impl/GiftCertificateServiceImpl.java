@@ -4,13 +4,10 @@ import com.epam.esm.converter.GiftCertificateConverter;
 import com.epam.esm.dto.GiftCertificateDTO;
 import com.epam.esm.dao.DAOException;
 import com.epam.esm.dao.GiftCertificateDAO;
-import com.epam.esm.dto.TagDTO;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.GiftTagService;
 import com.epam.esm.service.ServiceException;
-import com.epam.esm.service.TagService;
 import com.epam.esm.service.validator.GiftCertificateValidator;
-import com.epam.esm.service.validator.TagValidator;
 import com.epam.esm.service.validator.ValidatorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,23 +24,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDAO giftCertificateDAO;
     private final GiftCertificateValidator giftCertificateValidator;
     private final GiftCertificateConverter converter;
-    private final TagService tagService;
-    private final TagValidator tagValidator;
     private final GiftTagService giftTagService;
 
 
     @Autowired
     public GiftCertificateServiceImpl(GiftCertificateDAO giftCertificateDAO, GiftCertificateConverter converter,
-                                      GiftCertificateValidator giftCertificateValidator,
-                                      TagService tagService, TagValidator tagValidator, GiftTagService giftTagService){
+                                      GiftCertificateValidator giftCertificateValidator, GiftTagService giftTagService){
         this.giftCertificateDAO = giftCertificateDAO;
         this.converter = converter;
         this.giftCertificateValidator = giftCertificateValidator;
-        this.tagService = tagService;
-        this.tagValidator = tagValidator;
         this.giftTagService = giftTagService;
-
-
     }
 
     @Override
@@ -51,12 +41,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         try{
             giftCertificateValidator.validateNewCertificate(giftCertificate);
 
-            giftTagService.save(giftCertificate);
-
             giftCertificate.setCreateDate(LocalDate.now().toString());
             giftCertificate.setLastUpdateDate(LocalDate.now().toString());
 
-            return converter.mapToDto(giftCertificateDAO.save(converter.mapToEntity(giftCertificate)));
+            GiftCertificateDTO newCertificate = converter.mapToDto(giftCertificateDAO.save(converter.mapToEntity(giftCertificate)));
+
+            giftTagService.save(newCertificate.getId(), giftCertificate.getTags());
+
+            newCertificate.setTags(giftTagService.getTagsByCertificateId(newCertificate.getId()));
+            System.out.println(newCertificate.getTags());
+
+            return newCertificate;
         } catch (ValidatorException | DAOException e){
             LOGGER.warn("some service problems with validate or saving certificate");
             throw new ServiceException(e);
@@ -78,7 +73,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public List<GiftCertificateDTO> getAllCertificates() throws ServiceException {
         try{
-            return converter.mapToDto(giftCertificateDAO.getAllCertificates());
+            List<GiftCertificateDTO> allCertificates = converter.mapToDto(giftCertificateDAO.getAllCertificates());
+
+            for (int i = 0; i < allCertificates.size(); i++){
+                allCertificates.get(i).setTags(giftTagService.getTagsByCertificateId(allCertificates.get(i).getId()));
+            }
+
+            return allCertificates;
         } catch ( DAOException e){
             LOGGER.warn("some service problems with extracting certificates");
             throw new ServiceException(e);
@@ -92,43 +93,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
             updateParams.put("lastUpdateDate", LocalDate.now().toString());
 
+            if(updateParams.containsKey("tags")){
+                giftTagService.update((Integer) updateParams.get("id"), (List<String>) updateParams.get("tags"));
+            }
+
             giftCertificateDAO.updateCertificate(updateParams);
         } catch ( DAOException | ValidatorException e){
             LOGGER.warn("some service problems with extracting certificates");
             throw new ServiceException("service.update.certificate.error", e);
         }
     }
-
-//    @Override
-//    public List<GiftCertificateDTO> searchByPartOfCertificateName(String part) throws ServiceException {
-//        try{
-//            giftCertificateValidator.validatePartOfName(part);
-//
-//            return converter.mapToDto(giftCertificateDAO.searchByPartOfCertificateName(part));
-//        } catch ( DAOException | ValidatorException e) {
-//            LOGGER.warn("some service problems with extracting certificates");
-//            throw new ServiceException(e);
-//        }
-//    }
-//
-//    @Override
-//    public List<GiftCertificateDTO> sort(String sort) throws ServiceException {
-//        try{
-//            return converter.mapToDto(giftCertificateDAO.sort(sort));
-//        } catch ( DAOException e){
-//            LOGGER.warn("some service problems with extracting certificates");
-//            throw new ServiceException(e);
-//        }
-//    }
-//
-//    @Override
-//    public List<GiftCertificateDTO> searchAndSortByPartOfCertificateName(String part, String sort) throws ServiceException {
-//        try{
-//            return converter.mapToDto(giftCertificateDAO.searchAndSortByPartOfCertificateName(part, sort));
-//        } catch ( DAOException e){
-//            LOGGER.warn("some service problems with extracting certificates");
-//            throw new ServiceException(e);
-//        }
-//    }
-//
 }

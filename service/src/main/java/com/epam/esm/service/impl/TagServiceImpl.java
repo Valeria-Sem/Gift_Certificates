@@ -2,7 +2,6 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.converter.TagConverter;
 import com.epam.esm.dto.TagDTO;
-import com.epam.esm.entity.TagEntity;
 import com.epam.esm.dao.DAOException;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.service.ServiceException;
