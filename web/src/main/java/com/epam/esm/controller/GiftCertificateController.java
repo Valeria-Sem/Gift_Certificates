@@ -4,18 +4,13 @@ import com.epam.esm.dto.GiftCertificateDTO;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.GiftTagService;
 import com.epam.esm.service.ServiceException;
-import com.epam.esm.controller.util.JsonReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Valeria
@@ -52,8 +47,10 @@ public class GiftCertificateController {
      * @throws ServiceException if something goes wrong will be thrown
      */
     @PostMapping
-    public GiftCertificateDTO save(@RequestBody GiftCertificateDTO giftCertificateDTO) throws ServiceException{
-       return giftCertificateService.save(giftCertificateDTO);
+    public ResponseEntity<GiftCertificateDTO> save(@RequestBody GiftCertificateDTO giftCertificateDTO) throws ServiceException{
+        GiftCertificateDTO newCertificate = giftCertificateService.save(giftCertificateDTO);
+
+        return new ResponseEntity<>(newCertificate, HttpStatus.valueOf(201));
     }
 
     /**
@@ -62,8 +59,10 @@ public class GiftCertificateController {
      * @throws ServiceException if something goes wrong will be thrown
      */
     @PostMapping("/update")
-    public void updateCertificate(@RequestBody GiftCertificateDTO certificate) throws ServiceException{
+    public ResponseEntity<Void> updateCertificate(@RequestBody GiftCertificateDTO certificate) throws ServiceException{
         giftCertificateService.updateCertificate(certificate);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -83,8 +82,10 @@ public class GiftCertificateController {
      * @throws ServiceException if something goes wrong will be thrown
      */
     @DeleteMapping("/delete/{id}")
-    public void deleteGiftCertificate(@PathVariable(name = "id") int id) throws ServiceException{
+    public ResponseEntity<Void> deleteGiftCertificate(@PathVariable(name = "id") int id) throws ServiceException{
         giftCertificateService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -96,7 +97,7 @@ public class GiftCertificateController {
      * @throws ServiceException if something goes wrong will be thrown
      */
     @GetMapping(value = {"/search"})
-    public List<GiftCertificateDTO> search(@RequestParam(name = "part", required = false) String part,
+    public ResponseEntity<List<GiftCertificateDTO>> search(@RequestParam(name = "part", required = false) String part,
                                            @RequestParam(name = "tag", required = false) String tag,
                                            @RequestParam(name = "sort", required = false) String sort) throws ServiceException{
         HashMap properties = new HashMap<>();
@@ -104,7 +105,7 @@ public class GiftCertificateController {
         properties.put("tag", tag);
         properties.put("sort", sort);
 
-        return giftTagService.search(properties);
+        return new ResponseEntity<>(giftTagService.search(properties), HttpStatus.OK);
     }
 
     /**
@@ -113,7 +114,9 @@ public class GiftCertificateController {
      * @throws ServiceException if something goes wrong will be thrown
      */
     @DeleteMapping("/delete/giftTag/{id}")
-    public void delete(@PathVariable(name = "id") int id) throws ServiceException {
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") int id) throws ServiceException {
         giftTagService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

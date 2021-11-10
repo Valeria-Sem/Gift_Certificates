@@ -1,9 +1,12 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.dto.GiftCertificateDTO;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.service.ServiceException;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,8 +40,10 @@ public class TagController {
      * @throws ServiceException if something goes wrong will be thrown
      */
     @PostMapping
-    public TagDTO save(@RequestBody TagDTO tag) throws ServiceException {
-       return tagService.save(tag);
+    public ResponseEntity<TagDTO> save(@RequestBody TagDTO tag) throws ServiceException {
+        TagDTO newTag = tagService.save(tag);
+
+        return new ResponseEntity<>(newTag, HttpStatus.valueOf(201));
     }
 
     /**
@@ -47,8 +52,10 @@ public class TagController {
      * @throws ServiceException if something goes wrong will be thrown
      */
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable(name = "id") int id) throws ServiceException {
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") int id) throws ServiceException {
         tagService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -57,7 +64,7 @@ public class TagController {
      * @throws ServiceException if something goes wrong will be thrown
      */
     @GetMapping
-    public List<TagDTO> getAllTags() throws ServiceException{
-        return tagService.getAllTags();
+    public ResponseEntity<List<TagDTO>> getAllTags() throws ServiceException{
+        return new ResponseEntity<>(tagService.getAllTags(), HttpStatus.OK);
     }
 }
