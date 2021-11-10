@@ -58,24 +58,12 @@ public class GiftCertificateController {
 
     /**
      * Method for updating GiftCertificateDTO
-     * @param request http link where stored json with parameters for updating
+   //  * @param request http link where stored json with parameters for updating
      * @throws ServiceException if something goes wrong will be thrown
      */
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, path ="/update")
-    public void updateCertificate(HttpServletRequest request) throws ServiceException{
-        JsonReader reader = new JsonReader();
-        String json = null;
-
-        if ("POST".equalsIgnoreCase(request.getMethod()))
-        {
-            try {
-                json = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        giftCertificateService.updateCertificate(reader.getObjectsFromJSON(json));
+    @PostMapping("/update")
+    public void updateCertificate(@RequestBody GiftCertificateDTO certificate) throws ServiceException{
+        giftCertificateService.updateCertificate(certificate);
     }
 
     /**

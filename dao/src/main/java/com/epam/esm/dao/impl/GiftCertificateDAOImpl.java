@@ -3,6 +3,7 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.entity.GiftCertificateEntity;
 import com.epam.esm.dao.DAOException;
 import com.epam.esm.dao.GiftCertificateDAO;
+import com.epam.esm.util.SqlQueryBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -24,10 +25,7 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
             " values(?, ?, ?, ?, ?, ?)";
     private final String DELETE_QUERY = "delete from gift_certificate where id = ?";
     private final String SELECT_ALL_QUERY = "select * from gift_certificate";
-    private final String SELECT_BY_PART_OF_NAME = "select * from gift_certificate where name like CONCAT( '%',?,'%')";
-    private final String SELECT_SORT = "select * from gift_certificate order by name ";
     private final String SELECT_QUERY = "select * from gift_certificate ORDER BY id DESC LIMIT 1";
-    private final String SELECT_BY_PART_AND_SORT = "select * from gift_certificate where name like CONCAT( '%',?,'%') order by name ";
 
 
     @Autowired
@@ -74,9 +72,10 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
         try{
             updateParams.forEach((key, value) -> {
                 try {
-                    if(key.equals("id")){
+                    if(key.equals("id") || value == null){
                         return;
                     }
+
                     jdbcTemplate.update("update gift_certificate set " + key + " = '" + value + "' where id = " + updateParams.get("id"));
                 } catch (Exception e) {
                     LOGGER.error("some problems with updateParams");

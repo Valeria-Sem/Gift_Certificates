@@ -5,7 +5,7 @@ import com.epam.esm.dao.DAOException;
 import com.epam.esm.dao.GiftTagDAO;
 import com.epam.esm.entity.GiftTagEntity;
 import com.epam.esm.entity.TagEntity;
-import com.epam.esm.util.SqlSearchBuilder;
+import com.epam.esm.util.SqlQueryBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -81,7 +81,7 @@ public class GiftTagDAOImpl implements GiftTagDAO {
     @Override
     public List<GiftCertificateEntity> search(HashMap properties) throws DAOException {
         try{
-            return jdbcTemplate.query(SqlSearchBuilder.createSqlQuery(properties), new BeanPropertyRowMapper<>(GiftCertificateEntity.class));
+            return jdbcTemplate.query(SqlQueryBuilder.createSqlSearchQuery(properties), new BeanPropertyRowMapper<>(GiftCertificateEntity.class));
         } catch (Exception e){
             throw new DAOException("Some problems with extracting certificates");
         }

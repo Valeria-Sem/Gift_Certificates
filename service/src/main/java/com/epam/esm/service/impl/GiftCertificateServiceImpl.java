@@ -87,18 +87,29 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public void updateCertificate(HashMap updateParams) throws ServiceException {
+    public void updateCertificate(GiftCertificateDTO certificate) throws ServiceException {
         try{
-            giftCertificateValidator.validateUpdateData(updateParams);
+            HashMap updateParams = new HashMap<>();
+            updateParams.put("id", certificate.getId());
+            updateParams.put("last_update_date", LocalDate.now().toString());
+            updateParams.put("name", certificate.getName());
+            updateParams.put("description", certificate.getDescription());
 
-            updateParams.put("lastUpdateDate", LocalDate.now().toString());
-
-            if(updateParams.containsKey("tags")){
-                giftTagService.update((Integer) updateParams.get("id"), (List<String>) updateParams.get("tags"));
+            if(certificate.getDuration() != 0.0){
+                updateParams.put("duration", certificate.getDuration());
             }
 
+            if(certificate.getPrice() != 0){
+                updateParams.put("price", certificate.getPrice());
+            }
+
+            giftCertificateValidator.validateUpdateData(updateParams);
+
+
+            giftTagService.save((Integer) updateParams.get("id"), certificate.getTags());
+
             giftCertificateDAO.updateCertificate(updateParams);
-        } catch ( DAOException | ValidatorException e){
+        } catch (DAOException | ValidatorException e){
             LOGGER.warn("some service problems with extracting certificates");
             throw new ServiceException("service.update.certificate.error", e);
         }

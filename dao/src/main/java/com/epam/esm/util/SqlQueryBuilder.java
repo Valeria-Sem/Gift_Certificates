@@ -2,9 +2,9 @@ package com.epam.esm.util;
 
 import java.util.HashMap;
 
-public class SqlSearchBuilder {
+public class SqlQueryBuilder {
 
-    public static String createSqlQuery(HashMap properties){
+    public static String createSqlSearchQuery(HashMap properties){
         StringBuilder sql = new StringBuilder("select gift_certificate.* from gift_certificate, tag, gift_tag where " +
                 "gift_tag.gift_id = gift_certificate.id and gift_tag.tag_id = tag.id ");
 
