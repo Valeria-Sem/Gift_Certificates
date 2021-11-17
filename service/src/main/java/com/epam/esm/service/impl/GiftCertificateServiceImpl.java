@@ -132,25 +132,21 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
             GiftCertificateDTO oldCertificate = getCertificateById(certificate.getId());
 
-            BeanUtils.copyProperties(oldCertificate, certificate);
+            if(certificate.getName() == null){
+                certificate.setName(oldCertificate.getName());
+            }
 
-            System.out.println(certificate);
-//            if(certificate.getName() == null){
-//                certificate.setName(oldCertificate.getName());
-//            }
-//
-//            if(certificate.getDuration() == 0){
-//                certificate.setDuration(oldCertificate.getDuration());
-//            }
-//
-//            if(certificate.getDescription() == null){
-//                certificate.setDescription(oldCertificate.getDescription());
-//            }
-//
-//            if(certificate.getPrice() == 0){
-//                certificate.setPrice(oldCertificate.getPrice());
-//            }
+            if(certificate.getDuration() == 0){
+                certificate.setDuration(oldCertificate.getDuration());
+            }
 
+            if(certificate.getDescription() == null){
+                certificate.setDescription(oldCertificate.getDescription());
+            }
+
+            if(certificate.getPrice() == 0){
+                certificate.setPrice(oldCertificate.getPrice());
+            }
 
             GiftCertificateEntity updatedCertificate = converter.mapToEntity(certificate);
             giftCertificateDAO.updateCertificate(updatedCertificate);
@@ -159,6 +155,15 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             LOGGER.warn("some service problems with extracting certificates");
             throw new ServiceException("service.update.certificate.error", e);
         }
+
+
+//            BeanUtils.copyProperties(oldCertificate, certificate);
+//
+//            System.out.println(certificate);
+//        HashMap<String, Object> newMap = certificate.getObjects();
+//            HashMap<String, Object> oldMap = oldCertificate.getObjects();
+//
+//          //  certificate.
 
 //            Field[] fields = certificate.getClass().getDeclaredFields();
 //            Field[] oldFields = oldCertificate.getClass().getDeclaredFields();
