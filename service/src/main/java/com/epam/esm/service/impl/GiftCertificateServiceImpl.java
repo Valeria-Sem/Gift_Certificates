@@ -1,19 +1,25 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.converter.GiftCertificateConverter;
-import com.epam.esm.dto.GiftCertificateDTO;
 import com.epam.esm.dao.DAOException;
 import com.epam.esm.dao.GiftCertificateDAO;
+import com.epam.esm.dto.GiftCertificateDTO;
+import com.epam.esm.dto.TagDTO;
+import com.epam.esm.entity.GiftCertificateEntity;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.GiftTagService;
 import com.epam.esm.service.ServiceException;
 import com.epam.esm.service.validator.GiftCertificateValidator;
 import com.epam.esm.service.validator.ValidatorException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+//import com.diffplug.durian.FieldsAndGetters;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -44,17 +50,44 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             giftCertificate.setCreateDate(LocalDate.now().toString());
             giftCertificate.setLastUpdateDate(LocalDate.now().toString());
 
-            GiftCertificateDTO newCertificate = converter.mapToDto(giftCertificateDAO.save(converter.mapToEntity(giftCertificate)));
+            GiftCertificateEntity newEntity = converter.mapToEntity(giftCertificate);
+            newEntity = giftCertificateDAO.save(newEntity);
+
+            GiftCertificateDTO newCertificate = converter.mapToDto(newEntity);
 
             giftTagService.save(newCertificate.getId(), giftCertificate.getTags());
 
-            newCertificate.setTags(giftTagService.getTagsByCertificateId(newCertificate.getId()));
-            System.out.println(newCertificate.getTags());
+            List<TagDTO> tags = giftTagService.getTagsByCertificateId(newCertificate.getId());
+
+            newCertificate.setTags(tags);
 
             return newCertificate;
+
         } catch (ValidatorException | DAOException e){
             LOGGER.warn("some service problems with validate or saving certificate");
             throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public GiftCertificateDTO getCertificateById(int id) throws ServiceException {
+        try{
+            giftCertificateValidator.validateId(id);
+
+            GiftCertificateEntity newCertificateEntity = giftCertificateDAO.getCertificateById(id);
+
+            return converter.mapToDto(newCertificateEntity);
+
+        } catch (DAOException e){
+            LOGGER.warn("some service problems");
+            e.printStackTrace();
+
+            throw new ServiceException(e);
+        } catch (ValidatorException e) {
+            LOGGER.warn("some val problems");
+            e.printStackTrace();
+            throw new ServiceException(e);
+
         }
     }
 
@@ -73,13 +106,18 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public List<GiftCertificateDTO> getAllCertificates() throws ServiceException {
         try{
-            List<GiftCertificateDTO> allCertificates = converter.mapToDto(giftCertificateDAO.getAllCertificates());
+            List<GiftCertificateEntity> allCertificatesEntity = giftCertificateDAO.getAllCertificates();
 
-            for (int i = 0; i < allCertificates.size(); i++){
-                allCertificates.get(i).setTags(giftTagService.getTagsByCertificateId(allCertificates.get(i).getId()));
+            List<GiftCertificateDTO> allCertificatesDTO = converter.mapToDto(allCertificatesEntity);
+
+            for (GiftCertificateDTO certificate : allCertificatesDTO) {
+                List<TagDTO> tags = giftTagService.getTagsByCertificateId(certificate.getId());
+
+                certificate.setTags(tags);
             }
 
-            return allCertificates;
+            return allCertificatesDTO;
+
         } catch ( DAOException e){
             LOGGER.warn("some service problems with extracting certificates");
             throw new ServiceException(e);
@@ -89,29 +127,92 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public void updateCertificate(GiftCertificateDTO certificate) throws ServiceException {
         try{
-            HashMap updateParams = new HashMap<>();
-            updateParams.put("id", certificate.getId());
-            updateParams.put("last_update_date", LocalDate.now().toString());
-            updateParams.put("name", certificate.getName());
-            updateParams.put("description", certificate.getDescription());
 
-            if(certificate.getDuration() != 0.0){
-                updateParams.put("duration", certificate.getDuration());
-            }
+            certificate.setLastUpdateDate(LocalDate.now().toString());
 
-            if(certificate.getPrice() != 0){
-                updateParams.put("price", certificate.getPrice());
-            }
+            GiftCertificateDTO oldCertificate = getCertificateById(certificate.getId());
 
-            giftCertificateValidator.validateUpdateData(updateParams);
+            BeanUtils.copyProperties(oldCertificate, certificate);
+
+            System.out.println(certificate);
+//            if(certificate.getName() == null){
+//                certificate.setName(oldCertificate.getName());
+//            }
+//
+//            if(certificate.getDuration() == 0){
+//                certificate.setDuration(oldCertificate.getDuration());
+//            }
+//
+//            if(certificate.getDescription() == null){
+//                certificate.setDescription(oldCertificate.getDescription());
+//            }
+//
+//            if(certificate.getPrice() == 0){
+//                certificate.setPrice(oldCertificate.getPrice());
+//            }
 
 
-            giftTagService.save((Integer) updateParams.get("id"), certificate.getTags());
+            GiftCertificateEntity updatedCertificate = converter.mapToEntity(certificate);
+            giftCertificateDAO.updateCertificate(updatedCertificate);
 
-            giftCertificateDAO.updateCertificate(updateParams);
-        } catch (DAOException | ValidatorException e){
+        } catch (DAOException e){
             LOGGER.warn("some service problems with extracting certificates");
             throw new ServiceException("service.update.certificate.error", e);
         }
+
+//            Field[] fields = certificate.getClass().getDeclaredFields();
+//            Field[] oldFields = oldCertificate.getClass().getDeclaredFields();
+
+//        for(Field f : fields) {
+//
+//            try {
+//                Class t = f.getType();
+//                Object v =  f.get(certificate);
+//
+//                if (t == boolean.class && Boolean.FALSE.equals(v)) {
+//                    System.out.println(v);
+//
+//                } else if (t.isPrimitive() && ((Number) v).doubleValue() == 0) {
+//                    System.out.println(v);
+//
+//                } else if (!t.isPrimitive() && v == null) {
+//                    System.out.println(v);
+//
+//                }
+//
+//                System.out.println(v);
+//
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+
+//        .map(Field::getName)
+//        FieldsAndGetters f;
+//        Arrays.stream(fields)
+//                    .forEach(field -> {
+//                        try {
+//                            Class<?> t = field.getType();
+//                            Object v = field.get(certificate);
+//
+//                            if (t == boolean.class && Boolean.FALSE.equals(v)) {
+//                                System.out.println(v);
+//                            } else if (t.isPrimitive() && ((Number) v).doubleValue() == 0) {
+//                                System.out.println(v);
+//
+//                            } else if (!t.isPrimitive() && v == null) {
+//                                System.out.println(v);
+//
+//                            }
+//                        } catch (IllegalAccessException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//
+//                    });
     }
+
+
+
 }

@@ -51,7 +51,7 @@ public class TagController {
      * @param id tag ID
      * @throws ServiceException if something goes wrong will be thrown
      */
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") int id) throws ServiceException {
         tagService.delete(id);
 

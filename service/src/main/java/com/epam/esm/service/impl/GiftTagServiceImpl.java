@@ -7,6 +7,9 @@ import com.epam.esm.dto.GiftCertificateDTO;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.dao.DAOException;
 import com.epam.esm.dao.GiftTagDAO;
+import com.epam.esm.entity.GiftCertificateEntity;
+import com.epam.esm.entity.GiftTagEntity;
+import com.epam.esm.entity.TagEntity;
 import com.epam.esm.service.GiftTagService;
 import com.epam.esm.service.ServiceException;
 import com.epam.esm.service.TagService;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class GiftTagServiceImpl implements GiftTagService {
@@ -44,37 +48,25 @@ public class GiftTagServiceImpl implements GiftTagService {
 
     @Override
     public void save(int idCertificate, List<TagDTO> tags) throws ServiceException {
+        TagDTO tagDTO;
+
         try{
             if(!tags.isEmpty()){
+
+                GiftTagEntity newGiftTagEntity;
+
                 for(TagDTO tag: tags){
                     tagValidator.validateGiftTag(idCertificate, tag.getName());
 
                     if(tagService.getTagByName(tag.getName()) == null){
-                        TagDTO tagDTO = new TagDTO(tag.getName());
+                        tagDTO = new TagDTO(tag.getName());
+
                         tagService.save(tagDTO);
                     }
-                    giftTagConverter.mapToDto(giftTagDAO.save(idCertificate, tag.getName()));
-                }
-            }
 
-        } catch (DAOException | ValidatorException e){
-            LOGGER.warn("some service problems with validate or saving gift-tag");
-            throw new ServiceException(e);
-        }
-    }
+                    newGiftTagEntity = giftTagDAO.save(idCertificate, tag.getName());
 
-    @Override
-    public void update(int idCertificate, List<String> tags) throws ServiceException {
-        try{
-            if(!tags.isEmpty()){
-                for(String tag: tags){
-                    tagValidator.validateGiftTag(idCertificate, tag);
-
-                    if(tagService.getTagByName(tag) == null){
-                        TagDTO tagDTO = new TagDTO(tag);
-                        tagService.save(tagDTO);
-                    }
-                    giftTagConverter.mapToDto(giftTagDAO.save(idCertificate, tag));
+                    giftTagConverter.mapToDto(newGiftTagEntity);
                 }
             }
 
@@ -98,16 +90,24 @@ public class GiftTagServiceImpl implements GiftTagService {
 
     @Override
     public List<GiftCertificateDTO> getCertificatesByTagName(String name) throws ServiceException {
+        List<GiftCertificateEntity> certificatesEntity;
+        List<GiftCertificateDTO> certificatesDTO;
+        List<TagDTO> tags;
+
         try{
             tagValidator.validateTagName(name);
 
-            List<GiftCertificateDTO> certificates = giftCertificateConverter.mapToDto(giftTagDAO.getCertificatesByTagName(name));
+            certificatesEntity = giftTagDAO.getCertificatesByTagName(name);
 
-            for (int i = 0; i < certificates.size(); i++){
-                certificates.get(i).setTags(getTagsByCertificateId(certificates.get(i).getId()));
+            certificatesDTO = giftCertificateConverter.mapToDto(certificatesEntity);
+
+            for (GiftCertificateDTO certificate : certificatesDTO) {
+                tags = getTagsByCertificateId(certificate.getId());
+
+                certificate.setTags(tags);
             }
 
-            return certificates;
+            return certificatesDTO;
         } catch (ValidatorException | DAOException e){
             LOGGER.warn("some service problems with extracting tags");
             throw new ServiceException(e);
@@ -115,15 +115,24 @@ public class GiftTagServiceImpl implements GiftTagService {
     }
 
     @Override
-    public List<GiftCertificateDTO> search(HashMap properties) throws ServiceException {
-        try{
-            List<GiftCertificateDTO> certificates = giftCertificateConverter.mapToDto(giftTagDAO.search(properties));
+    public List<GiftCertificateDTO> search(HashMap<String, String> properties) throws ServiceException {
+        List<GiftCertificateEntity> certificatesEntity;
+        List<GiftCertificateDTO> certificatesDTO;
+        List<TagDTO> tags;
 
-            for (int i = 0; i < certificates.size(); i++){
-                certificates.get(i).setTags(getTagsByCertificateId(certificates.get(i).getId()));
+        try{
+            certificatesEntity = giftTagDAO.search(properties);
+
+            certificatesDTO = giftCertificateConverter.mapToDto(certificatesEntity);
+
+            for (GiftCertificateDTO certificate : certificatesDTO) {
+                tags = getTagsByCertificateId(certificate.getId());
+
+                certificate.setTags(tags);
             }
 
-            return certificates;
+            return certificatesDTO;
+
         } catch (DAOException e){
             LOGGER.warn("some service problems with extracting tags");
             throw new ServiceException(e);
@@ -132,8 +141,13 @@ public class GiftTagServiceImpl implements GiftTagService {
 
     @Override
     public List<TagDTO> getTagsByCertificateId(int id) throws ServiceException {
+        List<TagEntity> tagsEntity;
+
         try{
-            return tagConverter.mapToDto(giftTagDAO.getTagsByCertificateId(id));
+            tagsEntity = giftTagDAO.getTagsByCertificateId(id);
+
+            return tagConverter.mapToDto(tagsEntity);
+
         } catch (DAOException e){
             LOGGER.warn("some service problems with extracting tags");
             throw new ServiceException(e);

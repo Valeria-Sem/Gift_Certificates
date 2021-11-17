@@ -192,6 +192,24 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.diffplug.durian/durian -->
+        <dependency>
+            <groupId>com.diffplug.durian</groupId>
+            <artifactId>durian</artifactId>
+            <version>3.4.0</version>
+            <scope>runtime</scope>
+        </dependency>
+
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.diffplug.durian/durian &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.diffplug.durian</groupId>-->
+<!--            <artifactId>durian</artifactId>-->
+<!--            <version>1.0.1</version>-->
+<!--            <scope>runtime</scope>-->
+<!--        </dependency>-->
+
+
+
     </dependencies>
 
     <build>

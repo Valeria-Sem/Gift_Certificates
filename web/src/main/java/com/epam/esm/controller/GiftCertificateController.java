@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Valeria
@@ -81,7 +82,7 @@ public class GiftCertificateController {
      * @param id certificate ID
      * @throws ServiceException if something goes wrong will be thrown
      */
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteGiftCertificate(@PathVariable(name = "id") int id) throws ServiceException{
         giftCertificateService.delete(id);
 
@@ -100,12 +101,14 @@ public class GiftCertificateController {
     public ResponseEntity<List<GiftCertificateDTO>> search(@RequestParam(name = "part", required = false) String part,
                                            @RequestParam(name = "tag", required = false) String tag,
                                            @RequestParam(name = "sort", required = false) String sort) throws ServiceException{
-        HashMap properties = new HashMap<>();
+        HashMap<String, String> properties = new HashMap<>();
         properties.put("part", part);
         properties.put("tag", tag);
         properties.put("sort", sort);
 
-        return new ResponseEntity<>(giftTagService.search(properties), HttpStatus.OK);
+        List<GiftCertificateDTO> dtos = giftTagService.search(properties);
+
+        return new ResponseEntity<>(dtos , HttpStatus.OK);
     }
 
     /**
@@ -113,7 +116,7 @@ public class GiftCertificateController {
      * @param id giftTag ID
      * @throws ServiceException if something goes wrong will be thrown
      */
-    @DeleteMapping("/delete/giftTag/{id}")
+    @DeleteMapping("/giftTag/{id}")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") int id) throws ServiceException {
         giftTagService.delete(id);
 

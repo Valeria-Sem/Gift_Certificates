@@ -2,7 +2,9 @@ package com.epam.esm.dto;
 
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Component
@@ -80,117 +82,6 @@ public class GiftCertificateDTO {
         this.tags = tags;
     }
 
-//    public GiftCertificateDTO(int id, String name) {
-//        this.id = id;
-//        this.name = name;
-//    }
-//
-//    public GiftCertificateDTO(int id, String name, String description) {
-//        this.id = id;
-//        this.name = name;
-//        this.description = description;
-//    }
-//
-//    public GiftCertificateDTO(int id, String name, String description, double price) {
-//        this.id = id;
-//        this.name = name;
-//        this.description = description;
-//        this.price = price;
-//    }
-//
-//    public GiftCertificateDTO(int id, String name, String description, double price,
-//                              int duration) {
-//        this.id = id;
-//        this.name = name;
-//        this.description = description;
-//        this.price = price;
-//        this.duration = duration;
-//    }
-//
-//    public GiftCertificateDTO(int id, String description, double price,
-//                              int duration, List<TagDTO> tags) {
-//        this.id = id;
-//        this.description = description;
-//        this.price = price;
-//        this.duration = duration;
-//        this.tags = tags;
-//    }
-//
-//    public GiftCertificateDTO(int id, String description, double price,
-//                              int duration) {
-//        this.id = id;
-//        this.description = description;
-//        this.price = price;
-//        this.duration = duration;
-//    }
-//
-//    public GiftCertificateDTO(int id, String description, double price) {
-//        this.id = id;
-//        this.description = description;
-//        this.price = price;
-//    }
-//
-//    public GiftCertificateDTO(int id, List<TagDTO> tags) {
-//        this.id = id;
-//        this.tags = tags;
-//    }
-//
-//    public GiftCertificateDTO(int id, double price,
-//                              int duration, List<TagDTO> tags) {
-//        this.id = id;
-//        this.price = price;
-//        this.duration = duration;
-//        this.tags = tags;
-//    }
-//
-//    public GiftCertificateDTO(int id, int duration, List<TagDTO> tags) {
-//        this.id = id;
-//        this.duration = duration;
-//        this.tags = tags;
-//    }
-//
-//    public GiftCertificateDTO(int id, String name, double price, List<TagDTO> tags) {
-//        this.id = id;
-//        this.name = name;
-//        this.price = price;
-//        this.tags = tags;
-//    }
-//
-//    public GiftCertificateDTO(int id, String name, int duration) {
-//        this.id = id;
-//        this.name = name;
-//        this.duration = duration;
-//    }
-//
-//    public GiftCertificateDTO(int id, String name, List<TagDTO> tags) {
-//        this.id = id;
-//        this.name = name;
-//        this.tags = tags;
-//    }
-//
-//    public GiftCertificateDTO(int id, String name,
-//                              int duration, List<TagDTO> tags) {
-//        this.id = id;
-//        this.name = name;
-//        this.duration = duration;
-//        this.tags = tags;
-//    }
-//
-//    public GiftCertificateDTO(int id, String name, String description, double price, List<TagDTO> tags) {
-//        this.id = id;
-//        this.name = name;
-//        this.description = description;
-//        this.price = price;
-//        this.tags = tags;
-//    }
-//
-//    public GiftCertificateDTO(int id, double price,
-//                              int duration) {
-//        this.id = id;
-//        this.price = price;
-//        this.duration = duration;
-//    }
-
 
     public int getId() {
         return id;
@@ -254,6 +145,17 @@ public class GiftCertificateDTO {
 
     public void setTags(List<TagDTO> tags) {
         this.tags = tags;
+    }
+
+    public HashMap<String, Object> getObjects (){
+        HashMap<String, Object> objects = new HashMap<>();
+
+        objects.put("name", getName());
+        objects.put("duration", getDuration());
+        objects.put("description", getDescription());
+        objects.put("price", getPrice());
+
+        return objects;
     }
 
     @Override

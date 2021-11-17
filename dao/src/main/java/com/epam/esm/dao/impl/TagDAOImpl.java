@@ -1,6 +1,5 @@
 package com.epam.esm.dao.impl;
 
-import com.epam.esm.entity.GiftCertificateEntity;
 import com.epam.esm.entity.TagEntity;
 import com.epam.esm.dao.DAOException;
 import com.epam.esm.dao.TagDAO;
@@ -8,19 +7,14 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 public class TagDAOImpl implements TagDAO {
     private final Logger LOGGER = Logger.getLogger(TagDAOImpl.class);
     private final JdbcTemplate jdbcTemplate;
@@ -42,8 +36,7 @@ public class TagDAOImpl implements TagDAO {
         try{
             jdbcTemplate.update(INSERT_QUERY, tag.getName());
 
-            return jdbcTemplate.query(SELECT_QUERY, new BeanPropertyRowMapper<>(TagEntity.class))
-                    .stream().findAny().orElse(null);
+            return jdbcTemplate.queryForObject(SELECT_QUERY, new BeanPropertyRowMapper<>(TagEntity.class));
         } catch (Exception e){
             throw new DAOException("Some problems with saving Tag");
         }
@@ -70,8 +63,7 @@ public class TagDAOImpl implements TagDAO {
     @Override
     public TagEntity getTagByName(String name) throws DAOException {
         try{
-            return jdbcTemplate.query(SELECT_BY_NAME_QUERY, new BeanPropertyRowMapper<>(TagEntity.class), name)
-                    .stream().findAny().orElse(null);
+            return jdbcTemplate.queryForObject(SELECT_BY_NAME_QUERY, new BeanPropertyRowMapper<>(TagEntity.class), name);
         } catch (Exception e){
             throw new DAOException("Some problems with extracting Tag by name");
         }
