@@ -3,6 +3,7 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.entity.TagEntity;
 import com.epam.esm.dao.DAOException;
 import com.epam.esm.dao.TagDAO;
+import com.epam.esm.util.TagMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -30,15 +31,19 @@ public class TagDAOImpl implements TagDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, timeout = 360, rollbackFor = Exception.class)
+    @Transactional(isolation = Isolation.READ_COMMITTED,
+            propagation = Propagation.REQUIRED,
+            timeout = 360,
+            rollbackFor = Exception.class)
     @Override
     public TagEntity save(TagEntity tag) throws DAOException {
         try{
             jdbcTemplate.update(INSERT_QUERY, tag.getName());
 
-            return jdbcTemplate.queryForObject(SELECT_QUERY, new BeanPropertyRowMapper<>(TagEntity.class));
+            return jdbcTemplate.queryForObject(SELECT_QUERY, new TagMapper());
         } catch (Exception e){
-            throw new DAOException("Some problems with saving Tag");
+            e.printStackTrace();
+            throw new DAOException("Some problems with saving tag", e);
         }
     }
 
@@ -47,7 +52,8 @@ public class TagDAOImpl implements TagDAO {
         try{
             jdbcTemplate.update(DELETE_QUERY, id);
         } catch (Exception e){
-            throw new DAOException("Some problems with deleting Tag");
+            e.printStackTrace();
+            throw new DAOException("Some problems with deleting tag with id = " + id, e);
         }
     }
 
@@ -56,16 +62,18 @@ public class TagDAOImpl implements TagDAO {
         try{
             return jdbcTemplate.query(SELECT_ALL_QUERY, new BeanPropertyRowMapper<>(TagEntity.class));
         } catch (Exception e){
-            throw new DAOException("Some problems with extracting Tags");
+            e.printStackTrace();
+            throw new DAOException("Some problems with extracting tags", e);
         }
     }
 
     @Override
     public TagEntity getTagByName(String name) throws DAOException {
         try{
-            return jdbcTemplate.queryForObject(SELECT_BY_NAME_QUERY, new BeanPropertyRowMapper<>(TagEntity.class), name);
+            return jdbcTemplate.queryForObject(SELECT_BY_NAME_QUERY, new TagMapper(), name);
         } catch (Exception e){
-            throw new DAOException("Some problems with extracting Tag by name");
+            e.printStackTrace();
+            throw new DAOException("No such tag with name = " + name, e);
         }
 
     }

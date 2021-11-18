@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.security.SecureRandom;
 import java.sql.SQLException;
 
 /**
@@ -25,17 +26,7 @@ public class MyControllerAdvice {
      */
     @ExceptionHandler(ValidatorException.class)
     public ResponseEntity<String> handleEmptyInput(ValidatorException exception){
-        return new ResponseEntity<>("Try to send incorrect data! Please look into it.", HttpStatus.BAD_REQUEST);
-    }
-
-    /**
-     * Handler NumberFormatException here
-     * @param exception linc on NumberFormatException object
-     * @return Exception string with http status code
-     */
-    @ExceptionHandler(NumberFormatException.class)
-    public ResponseEntity<String> handleInvalidData(NumberFormatException exception){
-        return new ResponseEntity<>("Try to send incorrect data! Please look into it.", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exception.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -45,7 +36,12 @@ public class MyControllerAdvice {
      */
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<String> handleInvalidData(ServiceException exception){
-        return new ResponseEntity<>("Try to send incorrect data! Please look into it.", HttpStatus.BAD_REQUEST);
+        SecureRandom random = new SecureRandom();
+        int num = random.nextInt(100000);
+        String formatted = String.format("%05d", num);
+
+        return new ResponseEntity<>(exception.getLocalizedMessage() + "\n ErrorCode: " + formatted,
+                HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -55,7 +51,7 @@ public class MyControllerAdvice {
      */
     @ExceptionHandler(DAOException.class)
     public ResponseEntity<String> handleInvalidData(DAOException exception){
-        return new ResponseEntity<String>("Some problems!", HttpStatus.valueOf("451"));
+        return new ResponseEntity<String>(exception.getLocalizedMessage(), HttpStatus.valueOf("451"));
     }
 
     /**
@@ -65,6 +61,6 @@ public class MyControllerAdvice {
      */
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<String> handleInvalidData(NullPointerException exception){
-        return new ResponseEntity<String>("Data not found!", HttpStatus.valueOf("500"));
+        return new ResponseEntity<String>(exception.getLocalizedMessage(), HttpStatus.valueOf("500"));
     }
 }

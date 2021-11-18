@@ -5,6 +5,7 @@ import com.epam.esm.dao.DAOException;
 import com.epam.esm.dao.GiftTagDAO;
 import com.epam.esm.entity.GiftTagEntity;
 import com.epam.esm.entity.TagEntity;
+import com.epam.esm.util.GiftTagMapper;
 import com.epam.esm.util.SqlQueryBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +47,11 @@ public class GiftTagDAOImpl implements GiftTagDAO {
         try {
             jdbcTemplate.update(INSERT_QUERY, idCertificate, tagName);
 
-            return jdbcTemplate.queryForObject(SELECT_QUERY, new BeanPropertyRowMapper<>(GiftTagEntity.class));
+            return jdbcTemplate.queryForObject(SELECT_QUERY, new GiftTagMapper());
 
         } catch (Exception e) {
-            throw new DAOException("Some problems with saving giftTag");
+            e.printStackTrace();
+            throw new DAOException("Some problems with maintaining the connection between the certificate and the tag", e);
         }
     }
 
@@ -58,7 +60,8 @@ public class GiftTagDAOImpl implements GiftTagDAO {
         try {
             jdbcTemplate.update(DELETE_QUERY, id);
         } catch (Exception e) {
-            throw new DAOException("Some problems with deleting giftTag");
+            e.printStackTrace();
+            throw new DAOException("Some problems with deleting the connection between the certificate and the tag", e);
         }
     }
 
@@ -68,7 +71,8 @@ public class GiftTagDAOImpl implements GiftTagDAO {
             return jdbcTemplate.query(SELECT_BY_TAG_NAME_QUERY,
                     new BeanPropertyRowMapper<>(GiftCertificateEntity.class), name);
         } catch (Exception e) {
-            throw new DAOException("Some problems with get Certificates By Tag Name");
+            e.printStackTrace();
+            throw new DAOException("Some problems with extracting certificates by tag name = " + name, e);
         }
     }
 
@@ -77,7 +81,8 @@ public class GiftTagDAOImpl implements GiftTagDAO {
         try {
             return jdbcTemplate.query(GET_TAG_BY_GIFT_ID_QUERY, new BeanPropertyRowMapper<>(TagEntity.class), id);
         } catch (Exception e) {
-            throw new DAOException("Some problems with get Certificates By Tag Name");
+            e.printStackTrace();
+            throw new DAOException("Some problems with extracting tags by certificate id = " + id, e);
         }
     }
 
@@ -87,7 +92,8 @@ public class GiftTagDAOImpl implements GiftTagDAO {
             return jdbcTemplate.query(SqlQueryBuilder.createSqlSearchQuery(properties),
                     new BeanPropertyRowMapper<>(GiftCertificateEntity.class));
         } catch (Exception e) {
-            throw new DAOException("Some problems with extracting certificates");
+            e.printStackTrace();
+            throw new DAOException("Some problems with extracting certificates", e);
         }
     }
 }

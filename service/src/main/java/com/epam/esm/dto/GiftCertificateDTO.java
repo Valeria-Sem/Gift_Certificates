@@ -147,18 +147,7 @@ public class GiftCertificateDTO {
         this.tags = tags;
     }
 
-    public HashMap<String, Object> getObjects (){
-        HashMap<String, Object> objects = new HashMap<>();
-
-        objects.put("name", getName());
-        objects.put("duration", getDuration());
-        objects.put("description", getDescription());
-        objects.put("price", getPrice());
-
-        return objects;
-    }
-
-    @Override
+   @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

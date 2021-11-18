@@ -3,6 +3,7 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.dao.DAOException;
 import com.epam.esm.dao.GiftCertificateDAO;
 import com.epam.esm.entity.GiftCertificateEntity;
+import com.epam.esm.util.CertificateMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -35,7 +36,10 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, timeout = 360, rollbackFor = Exception.class)
+    @Transactional(isolation = Isolation.READ_COMMITTED,
+            propagation = Propagation.REQUIRED,
+            timeout = 360,
+            rollbackFor = Exception.class)
     @Override
     public GiftCertificateEntity save(GiftCertificateEntity giftCertificate) throws DAOException {
         try {
@@ -45,7 +49,8 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
 
             return jdbcTemplate.queryForObject(SELECT_QUERY, new BeanPropertyRowMapper<>(GiftCertificateEntity.class));
         } catch (Exception e) {
-            throw new DAOException("Some problems with saving certificate");
+            e.printStackTrace();
+            throw new DAOException("Some problems with saving certificate", e);
         }
 
     }
@@ -53,10 +58,10 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     @Override
     public GiftCertificateEntity getCertificateById(int id) throws DAOException {
         try {
-            return jdbcTemplate.query(SELECT_BY_ID_QUERY, new BeanPropertyRowMapper<>(GiftCertificateEntity.class), id)
-                .stream().findAny().orElse(null);
+            return jdbcTemplate.queryForObject(SELECT_BY_ID_QUERY , new CertificateMapper(), id);
         } catch (Exception e) {
-            throw new DAOException("Some problems with saving certificate");
+            e.printStackTrace();
+            throw new DAOException("No such certificate with id = " + id, e);
         }
     }
 
@@ -65,7 +70,8 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
         try {
             jdbcTemplate.update(DELETE_QUERY, id);
         } catch (Exception e) {
-            throw new DAOException("Some problems with deleting certificate");
+            e.printStackTrace();
+            throw new DAOException("Some problems with deleting certificate", e);
         }
     }
 
@@ -74,7 +80,8 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
         try {
             return jdbcTemplate.query(SELECT_ALL_QUERY, new BeanPropertyRowMapper<>(GiftCertificateEntity.class));
         } catch (Exception e) {
-            throw new DAOException("Some problems with extracting certificates");
+            e.printStackTrace();
+            throw new DAOException("Some problems with extracting certificates", e);
         }
     }
 
@@ -86,29 +93,8 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
 
         } catch (Exception e) {
             LOGGER.error("some problems with updating Certificates");
-            throw new DAOException("some problems with updating Certificates");
+            e.printStackTrace();
+            throw new DAOException("Some problems with updating Certificates", e);
         }
     }
-
-//    @Override
-//    public void updateCertificate(HashMap updateParams) throws DAOException {
-//        try {
-//            updateParams.forEach((key, value) -> {
-//                try {
-//                    if (key.equals("id") || value == null) {
-//                        return;
-//                    }
-//
-//                    jdbcTemplate.update("update gift_certificate set " + key + " = '" + value + "' where id = "
-//                            + updateParams.get("id"));
-//                } catch (Exception e) {
-//                    LOGGER.error("some problems with updateParams");
-//                    e.printStackTrace();
-//                }
-//            });
-//        } catch (Exception e) {
-//            LOGGER.error("some problems with updating Certificates");
-//            throw new DAOException("some problems with updating Certificates");
-//        }
-//    }
 }

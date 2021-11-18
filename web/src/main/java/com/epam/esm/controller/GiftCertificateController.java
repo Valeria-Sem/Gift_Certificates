@@ -77,6 +77,12 @@ public class GiftCertificateController {
         return new ResponseEntity<>(GiftCertificateDTOs, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<GiftCertificateDTO> getCertificateById(@PathVariable(name = "id") int id) throws ServiceException{
+        GiftCertificateDTO certificate = giftCertificateService.getCertificateById(id);
+        return new ResponseEntity<>(certificate, HttpStatus.OK);
+    }
+
     /**
      * Method for deleting GiftCertificate
      * @param id certificate ID

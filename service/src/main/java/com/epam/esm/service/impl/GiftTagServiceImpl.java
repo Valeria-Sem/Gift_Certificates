@@ -70,9 +70,15 @@ public class GiftTagServiceImpl implements GiftTagService {
                 }
             }
 
-        } catch (DAOException | ValidatorException e){
+        } catch (DAOException e){
             LOGGER.warn("some service problems with validate or saving gift-tag");
-            throw new ServiceException(e);
+            e.printStackTrace();
+            throw new ServiceException(e.getLocalizedMessage(), e);
+
+        } catch (ValidatorException e) {
+            LOGGER.warn("some val problems");
+            e.printStackTrace();
+            throw new ServiceException("Validation failed, please check input data! " + e.getLocalizedMessage(), e);
         }
     }
 
@@ -82,9 +88,15 @@ public class GiftTagServiceImpl implements GiftTagService {
             tagValidator.validateId(id);
 
             giftTagDAO.delete(id);
-        } catch (DAOException | ValidatorException e){
+        } catch (DAOException e){
             LOGGER.warn("some service problems with deleting gift-tag");
-            throw new ServiceException(e);
+            e.printStackTrace();
+            throw new ServiceException(e.getLocalizedMessage(), e);
+
+        } catch (ValidatorException e) {
+            LOGGER.warn("some val problems");
+            e.printStackTrace();
+            throw new ServiceException("Validation failed, please check input data! " + e.getLocalizedMessage(), e);
         }
     }
 
@@ -99,6 +111,10 @@ public class GiftTagServiceImpl implements GiftTagService {
 
             certificatesEntity = giftTagDAO.getCertificatesByTagName(name);
 
+            if(certificatesEntity.isEmpty()){
+                throw new ServiceException("No certificates by tag name = " + name);
+            }
+
             certificatesDTO = giftCertificateConverter.mapToDto(certificatesEntity);
 
             for (GiftCertificateDTO certificate : certificatesDTO) {
@@ -108,9 +124,16 @@ public class GiftTagServiceImpl implements GiftTagService {
             }
 
             return certificatesDTO;
-        } catch (ValidatorException | DAOException e){
+
+        } catch (DAOException e){
             LOGGER.warn("some service problems with extracting tags");
-            throw new ServiceException(e);
+            e.printStackTrace();
+            throw new ServiceException(e.getLocalizedMessage(), e);
+
+        } catch (ValidatorException e) {
+            LOGGER.warn("some val problems");
+            e.printStackTrace();
+            throw new ServiceException("Validation failed, please check input data! " + e.getLocalizedMessage(), e);
         }
     }
 
@@ -123,6 +146,10 @@ public class GiftTagServiceImpl implements GiftTagService {
         try{
             certificatesEntity = giftTagDAO.search(properties);
 
+            if(certificatesEntity.isEmpty()){
+                throw new ServiceException("No certificates");
+            }
+
             certificatesDTO = giftCertificateConverter.mapToDto(certificatesEntity);
 
             for (GiftCertificateDTO certificate : certificatesDTO) {
@@ -135,7 +162,8 @@ public class GiftTagServiceImpl implements GiftTagService {
 
         } catch (DAOException e){
             LOGGER.warn("some service problems with extracting tags");
-            throw new ServiceException(e);
+            e.printStackTrace();
+            throw new ServiceException(e.getLocalizedMessage(), e);
         }
     }
 
@@ -144,13 +172,25 @@ public class GiftTagServiceImpl implements GiftTagService {
         List<TagEntity> tagsEntity;
 
         try{
+            tagValidator.validateId(id);
+
             tagsEntity = giftTagDAO.getTagsByCertificateId(id);
+
+            if(tagsEntity.isEmpty()){
+                throw new ServiceException("No tags by certificate id = " + id);
+            }
 
             return tagConverter.mapToDto(tagsEntity);
 
         } catch (DAOException e){
             LOGGER.warn("some service problems with extracting tags");
-            throw new ServiceException(e);
+            e.printStackTrace();
+            throw new ServiceException(e.getLocalizedMessage(), e);
+
+        } catch (ValidatorException e) {
+            LOGGER.warn("some val problems");
+            e.printStackTrace();
+            throw new ServiceException("Validation failed, please check input data! " + e.getLocalizedMessage(), e);
         }
     }
 }
