@@ -31,7 +31,7 @@ public class CertificateMapper implements RowMapper<GiftCertificateEntity> {
             certificate.setLastUpdateDate(resultSet.getDate(LAST_UPDATE_DATE));
 
             return certificate;
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new SQLException(e.getLocalizedMessage(), e);
         }
     }

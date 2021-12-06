@@ -48,17 +48,17 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
                     giftCertificate.getLastUpdateDate());
 
             return jdbcTemplate.queryForObject(SELECT_QUERY, new BeanPropertyRowMapper<>(GiftCertificateEntity.class));
+
         } catch (Exception e) {
             e.printStackTrace();
-            throw new DAOException("Some problems with saving certificate", e);
+            throw new DAOException(e.getLocalizedMessage() + " Liaise to the admin", e);
         }
-
     }
 
     @Override
     public GiftCertificateEntity getCertificateById(int id) throws DAOException {
         try {
-            return jdbcTemplate.queryForObject(SELECT_BY_ID_QUERY , new CertificateMapper(), id);
+            return jdbcTemplate.queryForObject(SELECT_BY_ID_QUERY, new CertificateMapper(), id);
         } catch (Exception e) {
             e.printStackTrace();
             throw new DAOException("No such certificate with id = " + id, e);

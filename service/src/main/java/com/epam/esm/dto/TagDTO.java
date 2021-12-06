@@ -10,16 +10,16 @@ public class TagDTO {
     private int id;
     private String name;
 
-    public TagDTO(){
+    public TagDTO() {
 
     }
 
-    public TagDTO(int id, String name){
+    public TagDTO(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public TagDTO(String name){
+    public TagDTO(String name) {
         this.name = name;
     }
 

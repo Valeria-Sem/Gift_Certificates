@@ -1,9 +1,7 @@
 package com.epam.esm.converter.impl;
 
 import com.epam.esm.converter.TagConverter;
-import com.epam.esm.dto.GiftCertificateDTO;
 import com.epam.esm.dto.TagDTO;
-import com.epam.esm.entity.GiftCertificateEntity;
 import com.epam.esm.entity.TagEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

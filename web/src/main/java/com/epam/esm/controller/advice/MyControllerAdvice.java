@@ -21,46 +21,55 @@ public class MyControllerAdvice {
 
     /**
      * Handler ValidatorException here
+     *
      * @param exception linc on ValidatorException object
      * @return Exception string with http status code
      */
     @ExceptionHandler(ValidatorException.class)
-    public ResponseEntity<String> handleEmptyInput(ValidatorException exception){
-        return new ResponseEntity<>(exception.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    /**
-     * Handler ServiceException here
-     * @param exception linc on ServiceException object
-     * @return Exception string with http status code
-     */
-    @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<String> handleInvalidData(ServiceException exception){
+    public ResponseEntity<String> handleInvalidData(ValidatorException exception) {
         SecureRandom random = new SecureRandom();
-        int num = random.nextInt(100000);
-        String formatted = String.format("%05d", num);
+        int errorNum = random.nextInt(100000);
+        String formatted = String.format("%05d", errorNum);
 
         return new ResponseEntity<>(exception.getLocalizedMessage() + "\n ErrorCode: " + formatted,
                 HttpStatus.BAD_REQUEST);
     }
 
     /**
+     * Handler ServiceException here
+     *
+     * @param exception linc on ServiceException object
+     * @return Exception string with http status code
+     */
+    @ExceptionHandler(ServiceException.class)
+    public ResponseEntity<String> handleServiceErrors(ServiceException exception) {
+        SecureRandom random = new SecureRandom();
+        int errorNum = random.nextInt(100000);
+        String formatted = String.format("%05d", errorNum);
+
+        return new ResponseEntity<>(exception.getLocalizedMessage() + "\n ErrorCode: " + formatted,
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
      * Handler DAOException here
+     *
      * @param exception linc on DAOException object
      * @return Exception string with http status code
      */
     @ExceptionHandler(DAOException.class)
-    public ResponseEntity<String> handleInvalidData(DAOException exception){
+    public ResponseEntity<String> handleInvalidData(DAOException exception) {
         return new ResponseEntity<String>(exception.getLocalizedMessage(), HttpStatus.valueOf("451"));
     }
 
     /**
      * Handler NullPointerException here
+     *
      * @param exception linc on NullPointerException object
      * @return Exception string with http status code
      */
     @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<String> handleInvalidData(NullPointerException exception){
+    public ResponseEntity<String> handleInvalidData(NullPointerException exception) {
         return new ResponseEntity<String>(exception.getLocalizedMessage(), HttpStatus.valueOf("500"));
     }
 }

@@ -14,14 +14,14 @@ public class TagValidator {
 
     }
 
-    public void validateTagName(String name) throws ValidatorException{
-        if(StringUtils.isBlank(name) || !name.matches(TAG_REGEX)){
+    public void validateTagName(String name) throws ValidatorException {
+        if (StringUtils.isBlank(name) || !name.matches(TAG_REGEX)) {
             throw new ValidatorException("Tag name failed validation");
         }
     }
 
-    public void validateId(Integer id) throws ValidatorException{
-        if(id == null || !id.toString().matches(INTEGER_REGEX_PATTERN)){
+    public void validateId(Integer id) throws ValidatorException {
+        if (id == null || !id.toString().matches(INTEGER_REGEX_PATTERN)) {
             throw new ValidatorException("Id failed validation");
         }
     }

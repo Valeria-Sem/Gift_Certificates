@@ -15,13 +15,13 @@ public class TagMapper implements RowMapper<TagEntity> {
     public TagEntity mapRow(ResultSet resultSet, int i) throws SQLException {
         TagEntity tag;
 
-        try{
+        try {
             tag = new TagEntity();
             tag.setId(resultSet.getInt(ID));
             tag.setName(resultSet.getString(NAME));
 
             return tag;
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new SQLException(e.getLocalizedMessage(), e);
         }
     }

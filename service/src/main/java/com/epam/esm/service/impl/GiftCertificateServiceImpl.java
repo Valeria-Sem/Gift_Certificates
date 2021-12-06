@@ -35,7 +35,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Autowired
     public GiftCertificateServiceImpl(GiftCertificateDAO giftCertificateDAO, GiftCertificateConverter converter,
-                                      GiftCertificateValidator giftCertificateValidator, GiftTagService giftTagService){
+                                      GiftCertificateValidator giftCertificateValidator, GiftTagService giftTagService) {
         this.giftCertificateDAO = giftCertificateDAO;
         this.converter = converter;
         this.giftCertificateValidator = giftCertificateValidator;
@@ -48,7 +48,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         GiftCertificateDTO newCertificate;
         List<TagDTO> tags;
 
-        try{
+        try {
             giftCertificateValidator.validateNewCertificate(giftCertificate);
 
             giftCertificate.setCreateDate(LocalDate.now().toString());
@@ -67,7 +67,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
             return newCertificate;
 
-        } catch (DAOException e){
+        } catch (DAOException e) {
             LOGGER.warn("some service problems with saving certificate");
             e.printStackTrace();
             throw new ServiceException(e.getLocalizedMessage(), e);
@@ -85,7 +85,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         GiftCertificateDTO certificateDTO;
         List<TagDTO> tags;
 
-        try{
+        try {
             giftCertificateValidator.validateId(id);
 
             certificateEntity = giftCertificateDAO.getCertificateById(id);
@@ -98,7 +98,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
             return certificateDTO;
 
-        } catch (DAOException e){
+        } catch (DAOException e) {
             LOGGER.warn("some service problems");
             e.printStackTrace();
             throw new ServiceException(e.getLocalizedMessage(), e);
@@ -113,7 +113,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public void delete(int id) throws ServiceException {
-        try{
+        try {
             giftCertificateValidator.validateId(id);
 
             giftCertificateDAO.delete(id);
@@ -135,12 +135,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         List<GiftCertificateDTO> allCertificatesDTO;
         List<TagDTO> tags;
 
-        try{
+        try {
             allCertificatesEntity = giftCertificateDAO.getAllCertificates();
 
             allCertificatesDTO = converter.mapToDto(allCertificatesEntity);
 
-            if(allCertificatesDTO.isEmpty()){
+            if (allCertificatesDTO.isEmpty()) {
                 throw new ServiceException("No certificates in Database");
             }
 
@@ -152,7 +152,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
             return allCertificatesDTO;
 
-        } catch ( DAOException e){
+        } catch (DAOException e) {
             LOGGER.warn("some service problems with extracting certificates");
             e.printStackTrace();
             throw new ServiceException(e.getLocalizedMessage(), e);
@@ -163,30 +163,30 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public void updateCertificate(GiftCertificateDTO certificate) throws ServiceException {
         GiftCertificateDTO oldCertificate;
 
-        try{
+        try {
             certificate.setLastUpdateDate(LocalDate.now().toString());
 
             oldCertificate = getCertificateById(certificate.getId());
 
-            if(certificate.getName() == null){
+            if (certificate.getName() == null) {
                 certificate.setName(oldCertificate.getName());
             }
 
-            if(certificate.getDuration() == 0){
+            if (certificate.getDuration() == 0) {
                 certificate.setDuration(oldCertificate.getDuration());
             }
 
-            if(certificate.getDescription() == null){
+            if (certificate.getDescription() == null) {
                 certificate.setDescription(oldCertificate.getDescription());
             }
 
-            if(certificate.getPrice() == 0){
+            if (certificate.getPrice() == 0) {
                 certificate.setPrice(oldCertificate.getPrice());
             }
 
             giftCertificateValidator.validateNewCertificate(certificate);
 
-            if(certificate.getTags() != null){
+            if (certificate.getTags() != null) {
                 giftTagService.save(certificate.getId(), certificate.getTags());
             }
 
@@ -194,7 +194,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             GiftCertificateEntity updatedCertificate = converter.mapToEntity(certificate);
             giftCertificateDAO.updateCertificate(updatedCertificate);
 
-        } catch (DAOException e){
+        } catch (DAOException e) {
             LOGGER.warn("some service problems with update Certificate");
             throw new ServiceException(e.getLocalizedMessage(), e);
 

@@ -26,6 +26,7 @@ public class TagController {
 
     /**
      * This is GiftCertificateController constructor for initialization of the class
+     *
      * @param tagService link to the corresponding service
      */
     @Autowired
@@ -35,6 +36,7 @@ public class TagController {
 
     /**
      * Method for saving new Tag
+     *
      * @param tag object for saving into DB
      * @return TagDTO object
      * @throws ServiceException if something goes wrong will be thrown
@@ -48,6 +50,7 @@ public class TagController {
 
     /**
      * Method for deleting tags
+     *
      * @param id tag ID
      * @throws ServiceException if something goes wrong will be thrown
      */
@@ -60,11 +63,12 @@ public class TagController {
 
     /**
      * Method for getting all Tags
+     *
      * @return List with all tags from DB
      * @throws ServiceException if something goes wrong will be thrown
      */
     @GetMapping
-    public ResponseEntity<List<TagDTO>> getAllTags() throws ServiceException{
+    public ResponseEntity<List<TagDTO>> getAllTags() throws ServiceException {
         return new ResponseEntity<>(tagService.getAllTags(), HttpStatus.OK);
     }
 }

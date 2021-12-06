@@ -24,7 +24,7 @@ public class TagServiceImpl implements TagService {
     private final TagConverter tagConverter;
 
     @Autowired
-    public TagServiceImpl(TagDAO tagDAO, TagConverter tagConverter, TagValidator tagValidator){
+    public TagServiceImpl(TagDAO tagDAO, TagConverter tagConverter, TagValidator tagValidator) {
         this.tagDAO = tagDAO;
         this.tagConverter = tagConverter;
         this.tagValidator = tagValidator;
@@ -34,7 +34,7 @@ public class TagServiceImpl implements TagService {
     public TagDTO save(TagDTO tag) throws ServiceException {
         TagDTO tagDTO;
         TagEntity tagEntity;
-        try{
+        try {
             tagValidator.validateTagName(tag.getName());
 
             tagEntity = tagConverter.mapToEntity(tag);
@@ -44,7 +44,7 @@ public class TagServiceImpl implements TagService {
 
             return tagDTO;
 
-        } catch (DAOException e){
+        } catch (DAOException e) {
             LOGGER.warn("some service problems with validate or saving tag");
             e.printStackTrace();
             throw new ServiceException(e.getLocalizedMessage(), e);
@@ -58,12 +58,12 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void delete(int id) throws ServiceException {
-        try{
+        try {
             tagValidator.validateId(id);
 
             tagDAO.delete(id);
 
-        } catch (DAOException e){
+        } catch (DAOException e) {
             LOGGER.warn("some service problems with deleting tag");
             e.printStackTrace();
             throw new ServiceException(e.getLocalizedMessage(), e);
@@ -80,17 +80,17 @@ public class TagServiceImpl implements TagService {
         List<TagDTO> tagDTOS;
         List<TagEntity> tagEntities;
 
-        try{
+        try {
             tagEntities = tagDAO.getAllTags();
 
-            if(tagEntities.isEmpty()){
+            if (tagEntities.isEmpty()) {
                 throw new ServiceException("No tags");
             }
 
             tagDTOS = tagConverter.mapToDto(tagEntities);
 
             return tagDTOS;
-        } catch (DAOException e){
+        } catch (DAOException e) {
             LOGGER.warn("some service problems with extracting tags");
             e.printStackTrace();
             throw new ServiceException(e.getLocalizedMessage(), e);

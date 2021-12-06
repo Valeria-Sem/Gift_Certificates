@@ -18,6 +18,7 @@ public class GiftTagConverterImpl implements GiftTagConverter {
     public GiftTagConverterImpl(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
+
     @Override
     public GiftTagDTO mapToDto(GiftTagEntity giftTagEntity) {
         return modelMapper.map(giftTagEntity, GiftTagDTO.class);

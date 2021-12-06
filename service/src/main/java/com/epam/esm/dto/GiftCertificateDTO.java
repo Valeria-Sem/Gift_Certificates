@@ -22,7 +22,7 @@ public class GiftCertificateDTO {
     }
 
     public GiftCertificateDTO(int id, String name, String description,
-                                 double price, int duration, String createDate,
+                              double price, int duration, String createDate,
                               String lastUpdateDate, List<TagDTO> tags) {
         this.id = id;
         this.name = name;
@@ -35,7 +35,7 @@ public class GiftCertificateDTO {
     }
 
     public GiftCertificateDTO(String name, String description, double price,
-                                 int duration, String createDate, String lastUpdateDate, List<TagDTO> tags) {
+                              int duration, String createDate, String lastUpdateDate, List<TagDTO> tags) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -147,7 +147,7 @@ public class GiftCertificateDTO {
         this.tags = tags;
     }
 
-   @Override
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

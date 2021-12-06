@@ -9,16 +9,16 @@ public class TagEntity {
     private int id;
     private String name;
 
-    public TagEntity(){
+    public TagEntity() {
 
     }
 
-    public TagEntity(int id, String name){
+    public TagEntity(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public TagEntity(String name){
+    public TagEntity(String name) {
         this.name = name;
     }
 

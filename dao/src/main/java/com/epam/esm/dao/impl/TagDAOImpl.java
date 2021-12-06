@@ -37,11 +37,11 @@ public class TagDAOImpl implements TagDAO {
             rollbackFor = Exception.class)
     @Override
     public TagEntity save(TagEntity tag) throws DAOException {
-        try{
+        try {
             jdbcTemplate.update(INSERT_QUERY, tag.getName());
 
             return jdbcTemplate.queryForObject(SELECT_QUERY, new TagMapper());
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new DAOException("Some problems with saving tag", e);
         }
@@ -49,9 +49,9 @@ public class TagDAOImpl implements TagDAO {
 
     @Override
     public void delete(int id) throws DAOException {
-        try{
+        try {
             jdbcTemplate.update(DELETE_QUERY, id);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new DAOException("Some problems with deleting tag with id = " + id, e);
         }
@@ -59,9 +59,9 @@ public class TagDAOImpl implements TagDAO {
 
     @Override
     public List<TagEntity> getAllTags() throws DAOException {
-        try{
+        try {
             return jdbcTemplate.query(SELECT_ALL_QUERY, new BeanPropertyRowMapper<>(TagEntity.class));
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new DAOException("Some problems with extracting tags", e);
         }
@@ -69,9 +69,9 @@ public class TagDAOImpl implements TagDAO {
 
     @Override
     public TagEntity getTagByName(String name) throws DAOException {
-        try{
+        try {
             return jdbcTemplate.queryForObject(SELECT_BY_NAME_QUERY, new TagMapper(), name);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new DAOException("No such tag with name = " + name, e);
         }

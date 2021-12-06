@@ -16,7 +16,7 @@ public class GiftTagMapper implements RowMapper<GiftTagEntity> {
     public GiftTagEntity mapRow(ResultSet resultSet, int i) throws SQLException {
         GiftTagEntity giftTag;
 
-        try{
+        try {
             giftTag = new GiftTagEntity();
             giftTag.setId(resultSet.getInt(ID));
             giftTag.setId(resultSet.getInt(GIFT_ID));
@@ -24,7 +24,7 @@ public class GiftTagMapper implements RowMapper<GiftTagEntity> {
 
             return giftTag;
 
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new SQLException(e.getLocalizedMessage(), e);
         }
     }
