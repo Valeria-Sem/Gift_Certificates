@@ -1,6 +1,5 @@
 package com.epam.esm.controller.advice;
 
-import com.epam.esm.dao.DAOException;
 import com.epam.esm.service.ServiceException;
 import com.epam.esm.service.validator.ValidatorException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -57,10 +56,10 @@ public class MyControllerAdvice {
      * @param exception linc on DAOException object
      * @return Exception string with http status code
      */
-    @ExceptionHandler(DAOException.class)
-    public ResponseEntity<String> handleInvalidData(DAOException exception) {
-        return new ResponseEntity<String>(exception.getLocalizedMessage(), HttpStatus.valueOf("451"));
-    }
+//    @ExceptionHandler(DAOException.class)
+//    public ResponseEntity<String> handleInvalidData(DAOException exception) {
+//        return new ResponseEntity<String>(exception.getLocalizedMessage(), HttpStatus.valueOf("451"));
+//    }
 
     /**
      * Handler NullPointerException here

@@ -1,3 +1,0 @@
-CREATE TABLE gift_m ENGINE=MEMORY
-SELECT *
-FROM gift_certificate GROUP BY id;

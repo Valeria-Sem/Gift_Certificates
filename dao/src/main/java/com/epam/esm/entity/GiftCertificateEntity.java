@@ -1,12 +1,13 @@
 package com.epam.esm.entity;
 
-import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
+import java.util.Set;
 
-@Component
+@Entity
+@Table(name = "gift_certificate", schema = "gift_certificates")
 public class GiftCertificateEntity {
     private int id;
     private String name;
@@ -15,6 +16,7 @@ public class GiftCertificateEntity {
     private int duration;
     private Date createDate;
     private Date lastUpdateDate;
+    private Set<TagEntity> giftTags;
 
     public GiftCertificateEntity() {
     }
@@ -41,6 +43,9 @@ public class GiftCertificateEntity {
         this.lastUpdateDate = lastUpdateDate;
     }
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -49,6 +54,8 @@ public class GiftCertificateEntity {
         this.id = id;
     }
 
+    @Basic
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -57,6 +64,8 @@ public class GiftCertificateEntity {
         this.name = name;
     }
 
+    @Basic
+    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -65,6 +74,8 @@ public class GiftCertificateEntity {
         this.description = description;
     }
 
+    @Basic
+    @Column(name = "price")
     public double getPrice() {
         return price;
     }
@@ -73,6 +84,8 @@ public class GiftCertificateEntity {
         this.price = price;
     }
 
+    @Basic
+    @Column(name = "duration")
     public int getDuration() {
         return duration;
     }
@@ -81,6 +94,8 @@ public class GiftCertificateEntity {
         this.duration = duration;
     }
 
+    @Basic
+    @Column(name = "create_date")
     public Date getCreateDate() {
         return createDate;
     }
@@ -89,12 +104,28 @@ public class GiftCertificateEntity {
         this.createDate = createDate;
     }
 
+    @Basic
+    @Column(name = "last_update_date")
     public Date getLastUpdateDate() {
         return lastUpdateDate;
     }
 
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
+    }
+
+    @ManyToMany
+    @JoinTable(
+            name = "gift_tag",
+            joinColumns = @JoinColumn(name = "gift_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    public Set<TagEntity> getGiftTags() {
+        return giftTags;
+    }
+
+    public void setGiftTags(Set<TagEntity> giftTags) {
+        this.giftTags = giftTags;
     }
 
     @Override

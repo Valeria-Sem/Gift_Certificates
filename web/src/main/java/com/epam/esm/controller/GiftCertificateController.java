@@ -2,7 +2,6 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.GiftCertificateDTO;
 import com.epam.esm.service.GiftCertificateService;
-import com.epam.esm.service.GiftTagService;
 import com.epam.esm.service.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Valeria
@@ -26,20 +24,15 @@ public class GiftCertificateController {
     private final GiftCertificateService giftCertificateService;
 
     /**
-     * This is GiftTagService field where the link to the corresponding service will be placed
-     */
-    private final GiftTagService giftTagService;
-
-    /**
      * This is GiftCertificateController constructor for initialization of the class
      *
      * @param giftCertificateService link to the corresponding service
-     * @param giftTagService         link to the corresponding service
+//     * @param giftTagService         link to the corresponding service
      */
     @Autowired
-    public GiftCertificateController(GiftCertificateService giftCertificateService, GiftTagService giftTagService) {
+    public GiftCertificateController(GiftCertificateService giftCertificateService) {
         this.giftCertificateService = giftCertificateService;
-        this.giftTagService = giftTagService;
+//        this.giftTagService = giftTagService;
     }
 
     /**
@@ -49,12 +42,12 @@ public class GiftCertificateController {
      * @return GiftCertificateDTO object
      * @throws ServiceException if something goes wrong will be thrown
      */
-    @PostMapping
-    public ResponseEntity<GiftCertificateDTO> save(@RequestBody GiftCertificateDTO giftCertificateDTO) throws ServiceException {
-        GiftCertificateDTO newCertificate = giftCertificateService.save(giftCertificateDTO);
-
-        return new ResponseEntity<>(newCertificate, HttpStatus.valueOf(201));
-    }
+//    @PostMapping
+//    public ResponseEntity<GiftCertificateDTO> save(@RequestBody GiftCertificateDTO giftCertificateDTO) throws ServiceException {
+//        GiftCertificateDTO newCertificate = giftCertificateService.save(giftCertificateDTO);
+//
+//        return new ResponseEntity<>(newCertificate, HttpStatus.valueOf(201));
+//    }
 
     /**
      * Method for updating GiftCertificateDTO
@@ -62,12 +55,12 @@ public class GiftCertificateController {
      *
      * @throws ServiceException if something goes wrong will be thrown
      */
-    @PostMapping("/update")
-    public ResponseEntity<Void> updateCertificate(@RequestBody GiftCertificateDTO certificate) throws ServiceException {
-        giftCertificateService.updateCertificate(certificate);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PostMapping("/update")
+//    public ResponseEntity<Void> updateCertificate(@RequestBody GiftCertificateDTO certificate) throws ServiceException {
+//        giftCertificateService.updateCertificate(certificate);
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     /**
      * Method for getting all Gift Certificates
@@ -75,17 +68,17 @@ public class GiftCertificateController {
      * @return List with all GiftCertificates
      * @throws ServiceException if something goes wrong will be thrown
      */
-    @GetMapping
-    public ResponseEntity<List<GiftCertificateDTO>> getAllCertificates() throws ServiceException {
-        List<GiftCertificateDTO> GiftCertificateDTOs = giftCertificateService.getAllCertificates();
-        return new ResponseEntity<>(GiftCertificateDTOs, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<GiftCertificateDTO> getCertificateById(@PathVariable(name = "id") int id) throws ServiceException {
-        GiftCertificateDTO certificate = giftCertificateService.getCertificateById(id);
-        return new ResponseEntity<>(certificate, HttpStatus.OK);
-    }
+//    @GetMapping
+//    public ResponseEntity<List<GiftCertificateDTO>> getAllCertificates() throws ServiceException {
+//        List<GiftCertificateDTO> GiftCertificateDTOs = giftCertificateService.getAllCertificates();
+//        return new ResponseEntity<>(GiftCertificateDTOs, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<GiftCertificateDTO> getCertificateById(@PathVariable(name = "id") int id) throws ServiceException {
+//        GiftCertificateDTO certificate = giftCertificateService.getCertificateById(id);
+//        return new ResponseEntity<>(certificate, HttpStatus.OK);
+//    }
 
     /**
      * Method for deleting GiftCertificate
@@ -93,12 +86,12 @@ public class GiftCertificateController {
      * @param id certificate ID
      * @throws ServiceException if something goes wrong will be thrown
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGiftCertificate(@PathVariable(name = "id") int id) throws ServiceException {
-        giftCertificateService.delete(id);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deleteGiftCertificate(@PathVariable(name = "id") int id) throws ServiceException {
+//        giftCertificateService.delete(id);
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     /**
      * Method for search and sort among the certificates
@@ -109,19 +102,19 @@ public class GiftCertificateController {
      * @return List of Certificates
      * @throws ServiceException if something goes wrong will be thrown
      */
-    @GetMapping(value = {"/search"})
-    public ResponseEntity<List<GiftCertificateDTO>> search(@RequestParam(name = "part", required = false) String part,
-                                                           @RequestParam(name = "tag", required = false) String tag,
-                                                           @RequestParam(name = "sort", required = false) String sort) throws ServiceException {
-        HashMap<String, String> properties = new HashMap<>();
-        properties.put("part", part);
-        properties.put("tag", tag);
-        properties.put("sort", sort);
-
-        List<GiftCertificateDTO> dtos = giftTagService.search(properties);
-
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
-    }
+//    @GetMapping(value = {"/search"})
+//    public ResponseEntity<List<GiftCertificateDTO>> search(@RequestParam(name = "part", required = false) String part,
+//                                                           @RequestParam(name = "tag", required = false) String tag,
+//                                                           @RequestParam(name = "sort", required = false) String sort) throws ServiceException {
+//        HashMap<String, String> properties = new HashMap<>();
+//        properties.put("part", part);
+//        properties.put("tag", tag);
+//        properties.put("sort", sort);
+//
+//        List<GiftCertificateDTO> dtos = giftTagService.search(properties);
+//
+//        return new ResponseEntity<>(dtos, HttpStatus.OK);
+//    }
 
     /**
      * Method for deleting relationship between certificate and tag
@@ -129,10 +122,10 @@ public class GiftCertificateController {
      * @param id giftTag ID
      * @throws ServiceException if something goes wrong will be thrown
      */
-    @DeleteMapping("/giftTag/{id}")
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") int id) throws ServiceException {
-        giftTagService.delete(id);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @DeleteMapping("/giftTag/{id}")
+//    public ResponseEntity<Void> delete(@PathVariable(name = "id") int id) throws ServiceException {
+//        giftTagService.delete(id);
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 }
