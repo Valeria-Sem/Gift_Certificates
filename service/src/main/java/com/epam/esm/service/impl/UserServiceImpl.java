@@ -27,9 +27,20 @@ public class UserServiceImpl implements UserService {
         List<UserDTO> userDTOs;
         List<UserEntity> userEntities;
 
-        userEntities = (List<UserEntity>) userRepository.findAll();
+        userEntities = userRepository.findAll();
         userDTOs = converter.mapToDto(userEntities);
 
         return userDTOs;
+    }
+
+    @Override
+    public UserDTO findUserById(Long id) {
+        UserDTO userDTO;
+        UserEntity userEntity;
+
+        userEntity = userRepository.findUserEntityById(id);
+        userDTO = converter.mapToDto(userEntity);
+
+        return userDTO;
     }
 }

@@ -42,12 +42,12 @@ public class GiftCertificateController {
      * @return GiftCertificateDTO object
      * @throws ServiceException if something goes wrong will be thrown
      */
-//    @PostMapping
-//    public ResponseEntity<GiftCertificateDTO> save(@RequestBody GiftCertificateDTO giftCertificateDTO) throws ServiceException {
-//        GiftCertificateDTO newCertificate = giftCertificateService.save(giftCertificateDTO);
-//
-//        return new ResponseEntity<>(newCertificate, HttpStatus.valueOf(201));
-//    }
+    @PostMapping
+    public ResponseEntity<GiftCertificateDTO> save(@RequestBody GiftCertificateDTO giftCertificateDTO) throws ServiceException {
+        GiftCertificateDTO newCertificate = giftCertificateService.save(giftCertificateDTO);
+
+        return new ResponseEntity<>(newCertificate, HttpStatus.valueOf(201));
+    }
 
     /**
      * Method for updating GiftCertificateDTO
@@ -55,12 +55,12 @@ public class GiftCertificateController {
      *
      * @throws ServiceException if something goes wrong will be thrown
      */
-//    @PostMapping("/update")
-//    public ResponseEntity<Void> updateCertificate(@RequestBody GiftCertificateDTO certificate) throws ServiceException {
-//        giftCertificateService.updateCertificate(certificate);
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    @PutMapping("/update")
+    public ResponseEntity<GiftCertificateDTO> updateCertificate(@RequestBody GiftCertificateDTO certificate) throws ServiceException {
+        GiftCertificateDTO gift = giftCertificateService.updateCertificate(certificate);
+
+        return new ResponseEntity<>(gift, HttpStatus.valueOf(201));
+    }
 
     /**
      * Method for getting all Gift Certificates
@@ -68,17 +68,17 @@ public class GiftCertificateController {
      * @return List with all GiftCertificates
      * @throws ServiceException if something goes wrong will be thrown
      */
-//    @GetMapping
-//    public ResponseEntity<List<GiftCertificateDTO>> getAllCertificates() throws ServiceException {
-//        List<GiftCertificateDTO> GiftCertificateDTOs = giftCertificateService.getAllCertificates();
-//        return new ResponseEntity<>(GiftCertificateDTOs, HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<GiftCertificateDTO> getCertificateById(@PathVariable(name = "id") int id) throws ServiceException {
-//        GiftCertificateDTO certificate = giftCertificateService.getCertificateById(id);
-//        return new ResponseEntity<>(certificate, HttpStatus.OK);
-//    }
+    @GetMapping
+    public ResponseEntity<List<GiftCertificateDTO>> getAllCertificates() throws ServiceException {
+        List<GiftCertificateDTO> GiftCertificateDTOs = giftCertificateService.getAllCertificates();
+        return new ResponseEntity<>(GiftCertificateDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GiftCertificateDTO> getCertificateById(@PathVariable(name = "id") Long id) throws ServiceException {
+        GiftCertificateDTO certificate = giftCertificateService.getCertificateById(id);
+        return new ResponseEntity<>(certificate, HttpStatus.OK);
+    }
 
     /**
      * Method for deleting GiftCertificate
@@ -86,12 +86,12 @@ public class GiftCertificateController {
      * @param id certificate ID
      * @throws ServiceException if something goes wrong will be thrown
      */
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteGiftCertificate(@PathVariable(name = "id") int id) throws ServiceException {
-//        giftCertificateService.delete(id);
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteGiftCertificate(@PathVariable(name = "id") Long id) throws ServiceException {
+        giftCertificateService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     /**
      * Method for search and sort among the certificates

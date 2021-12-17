@@ -34,16 +34,6 @@ public class UserConverterImpl implements UserConverter {
     public List<UserEntity> mapToEntity(List<UserDTO> users) {
         return users.stream().map(this::mapToEntity).collect(Collectors.toList());
     }
-//
-//    @Override
-//    public Iterable<UserDTO> mapToDto(Iterable<UserEntity> users) {
-//        return users.stream().map(this::mapToEntity).collect(Collectors.toList());
-//    }
-//
-//    @Override
-//    public Iterable<UserEntity> mapToEntity(Iterable<UserDTO> users) {
-//        return null;
-//    }
 
     @Override
     public UserEntity mapToEntity(UserDTO userDTO) {

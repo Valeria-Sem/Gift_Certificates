@@ -2,14 +2,12 @@ package com.epam.esm.dto;
 
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.time.LocalDate;
+import java.util.*;
 
 @Component
 public class GiftCertificateDTO {
-    private int id;
+    private Long id;
     private String name;
     private String description;
     private double price;
@@ -21,7 +19,7 @@ public class GiftCertificateDTO {
     public GiftCertificateDTO() {
     }
 
-    public GiftCertificateDTO(int id, String name, String description,
+    public GiftCertificateDTO(Long id, String name, String description,
                               double price, int duration, String createDate,
                               String lastUpdateDate, List<TagDTO> tags) {
         this.id = id;
@@ -72,7 +70,7 @@ public class GiftCertificateDTO {
         this.tags = tags;
     }
 
-    public GiftCertificateDTO(int id, String name, String description, double price,
+    public GiftCertificateDTO(Long id, String name, String description, double price,
                               int duration, List<TagDTO> tags) {
         this.id = id;
         this.name = name;
@@ -83,11 +81,11 @@ public class GiftCertificateDTO {
     }
 
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -152,7 +150,14 @@ public class GiftCertificateDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GiftCertificateDTO dto = (GiftCertificateDTO) o;
-        return id == dto.id && Double.compare(dto.price, price) == 0 && duration == dto.duration && name.equals(dto.name) && description.equals(dto.description) && createDate.equals(dto.createDate) && lastUpdateDate.equals(dto.lastUpdateDate) && tags.equals(dto.tags);
+        return Objects.equals(id, dto.id) &&
+                Double.compare(dto.price, price) == 0 &&
+                duration == dto.duration &&
+                name.equals(dto.name) &&
+                description.equals(dto.description) &&
+                createDate.equals(dto.createDate) &&
+                lastUpdateDate.equals(dto.lastUpdateDate) &&
+                tags.equals(dto.tags);
     }
 
     @Override

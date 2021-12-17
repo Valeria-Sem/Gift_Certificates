@@ -3,25 +3,26 @@ package com.epam.esm.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "gift_certificate", schema = "gift_certificates")
 public class GiftCertificateEntity {
-    private int id;
+    private Long id;
     private String name;
     private String description;
     private double price;
     private int duration;
     private Date createDate;
     private Date lastUpdateDate;
-    private Set<TagEntity> giftTags;
+    private List<TagEntity> giftTags;
 
     public GiftCertificateEntity() {
     }
 
-    public GiftCertificateEntity(int id, String name, String description,
+    public GiftCertificateEntity(Long id, String name, String description,
                                  double price, int duration, Date createDate,
                                  Date lastUpdateDate) {
         this.id = id;
@@ -46,11 +47,11 @@ public class GiftCertificateEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -120,11 +121,11 @@ public class GiftCertificateEntity {
             joinColumns = @JoinColumn(name = "gift_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    public Set<TagEntity> getGiftTags() {
+    public List<TagEntity> getGiftTags() {
         return giftTags;
     }
 
-    public void setGiftTags(Set<TagEntity> giftTags) {
+    public void setGiftTags(List<TagEntity> giftTags) {
         this.giftTags = giftTags;
     }
 
@@ -133,7 +134,8 @@ public class GiftCertificateEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GiftCertificateEntity that = (GiftCertificateEntity) o;
-        return id == that.id && Double.compare(that.price, price) == 0
+        return Objects.equals(id, that.id)
+                && Double.compare(that.price, price) == 0
                 && duration == that.duration
                 && name.equals(that.name)
                 && description.equals(that.description)

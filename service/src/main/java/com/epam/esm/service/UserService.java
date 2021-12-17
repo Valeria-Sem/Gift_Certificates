@@ -5,4 +5,6 @@ import com.epam.esm.dto.UserDTO;
 
 public interface UserService {
     Iterable<UserDTO> findAllUsers ();
+
+    UserDTO findUserById(Long id);
 }

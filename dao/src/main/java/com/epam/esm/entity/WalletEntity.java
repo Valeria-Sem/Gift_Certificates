@@ -6,14 +6,14 @@ import java.util.Objects;
 @Entity
 @Table(name = "wallet", schema = "gift_certificates")
 public class WalletEntity {
-    private int id;
+    private Long id;
     private double balance;
     private UserEntity user;
 
     public WalletEntity() {
     }
 
-    public WalletEntity(int id, double balance) {
+    public WalletEntity(Long id, double balance) {
         this.id = id;
         this.balance = balance;
     }
@@ -25,11 +25,11 @@ public class WalletEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -57,7 +57,7 @@ public class WalletEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WalletEntity that = (WalletEntity) o;
-        return id == that.id &&
+        return Objects.equals(id, that.id) &&
                 Double.compare(that.balance, balance) == 0;
     }
 

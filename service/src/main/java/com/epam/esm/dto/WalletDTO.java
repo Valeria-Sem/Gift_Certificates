@@ -6,14 +6,14 @@ import java.util.Objects;
 
 @Component
 public class WalletDTO {
-    private int id;
+    private Long id;
     private double balance;
-    private UserDTO user;
+//    private UserDTO user;
 
     public WalletDTO() {
     }
 
-    public WalletDTO(int id, double balance) {
+    public WalletDTO(Long id, double balance) {
         this.id = id;
         this.balance = balance;
     }
@@ -22,17 +22,17 @@ public class WalletDTO {
         this.balance = balance;
     }
 
-    public WalletDTO(int id, double balance, UserDTO user) {
-        this.id = id;
-        this.balance = balance;
-        this.user = user;
-    }
+//    public WalletDTO(int id, double balance, UserDTO user) {
+//        this.id = id;
+//        this.balance = balance;
+////        this.user = user;
+//    }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -43,26 +43,28 @@ public class WalletDTO {
     public void setBalance(double balance) {
         this.balance = balance;
     }
-
-    public UserDTO getUser() {
-        return user;
-    }
-
-    public void setUser(UserDTO user) {
-        this.user = user;
-    }
+//
+//    public UserDTO getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(UserDTO user) {
+//        this.user = user;
+//    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WalletDTO walletDTO = (WalletDTO) o;
-        return id == walletDTO.id && Double.compare(walletDTO.balance, balance) == 0 && Objects.equals(user, walletDTO.user);
+        return Objects.equals(id, walletDTO.id) &&
+                Double.compare(walletDTO.balance, balance) == 0;
+//                && Objects.equals(user, walletDTO.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, balance, user);
+        return Objects.hash(id, balance);
     }
 
     @Override
@@ -70,7 +72,6 @@ public class WalletDTO {
         return "WalletDTO{" +
                 "id=" + id +
                 ", balance=" + balance +
-                ", user=" + user +
                 '}';
     }
 }

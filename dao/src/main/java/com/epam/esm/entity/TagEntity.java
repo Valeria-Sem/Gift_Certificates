@@ -6,17 +6,17 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "gift_certificate", schema = "gift_certificates")
+@Table(name = "tag", schema = "gift_certificates")
 public class TagEntity {
-    private int id;
+    private Long id;
     private String name;
-    private Set<GiftCertificateEntity> tagGifts;
+//    private Set<GiftCertificateEntity> tagGifts;
 
     public TagEntity() {
 
     }
 
-    public TagEntity(int id, String name) {
+    public TagEntity(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -28,11 +28,11 @@ public class TagEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -46,21 +46,22 @@ public class TagEntity {
         this.name = name;
     }
 
-    @ManyToMany(mappedBy = "giftTags")
-    public Set<GiftCertificateEntity> getTagGifts() {
-        return tagGifts;
-    }
-
-    public void setTagGifts(Set<GiftCertificateEntity> tagGifts) {
-        this.tagGifts = tagGifts;
-    }
+//    @ManyToMany(mappedBy = "giftTags")
+//    public Set<GiftCertificateEntity> getTagGifts() {
+//        return tagGifts;
+//    }
+//
+//    public void setTagGifts(Set<GiftCertificateEntity> tagGifts) {
+//        this.tagGifts = tagGifts;
+//    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TagEntity tagBean = (TagEntity) o;
-        return id == tagBean.id && Objects.equals(name, tagBean.name);
+        return Objects.equals(id, tagBean.id) &&
+                Objects.equals(name, tagBean.name);
     }
 
     @Override

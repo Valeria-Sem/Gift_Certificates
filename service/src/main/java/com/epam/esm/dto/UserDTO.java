@@ -6,20 +6,20 @@ import java.util.Objects;
 
 @Component
 public class UserDTO {
-    private int id;
+    private Long id;
     private String login;
     private WalletDTO wallet;
 
     public UserDTO() {
     }
 
-    public UserDTO(int id, String login, WalletDTO wallet) {
+    public UserDTO(Long id, String login, WalletDTO wallet) {
         this.id = id;
         this.login = login;
         this.wallet = wallet;
     }
 
-    public UserDTO(int id, String login) {
+    public UserDTO(Long id, String login) {
         this.id = id;
         this.login = login;
     }
@@ -28,11 +28,11 @@ public class UserDTO {
         this.login = login;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -57,7 +57,9 @@ public class UserDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserDTO userDTO = (UserDTO) o;
-        return id == userDTO.id && login.equals(userDTO.login) && wallet.equals(userDTO.wallet);
+        return Objects.equals(id, userDTO.id) &&
+                login.equals(userDTO.login) &&
+                wallet.equals(userDTO.wallet);
     }
 
     @Override

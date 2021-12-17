@@ -6,14 +6,14 @@ import java.util.Objects;
 
 @Component
 public class TagDTO {
-    private int id;
+    private Long id;
     private String name;
 
     public TagDTO() {
 
     }
 
-    public TagDTO(int id, String name) {
+    public TagDTO(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -22,11 +22,11 @@ public class TagDTO {
         this.name = name;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -43,7 +43,8 @@ public class TagDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TagDTO tagBean = (TagDTO) o;
-        return id == tagBean.id && Objects.equals(name, tagBean.name);
+        return Objects.equals(id, tagBean.id) &&
+                Objects.equals(name, tagBean.name);
     }
 
     @Override

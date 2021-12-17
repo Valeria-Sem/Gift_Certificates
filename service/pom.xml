@@ -6,22 +6,22 @@
 <!--    <version>1.1-SNAPSHOT</version>-->
 <!--    <packaging>pom</packaging>-->
 
-<!--    <parent>-->
-<!--        <groupId>com.epam.esm</groupId>-->
-<!--        <artifactId>Gift_Certificates</artifactId>-->
-<!--        <version>1.0-SNAPSHOT</version>-->
-<!--    </parent>-->
-
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.5</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.epam.esm</groupId>
+        <artifactId>Gift_Certificates</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.epam.esm</groupId>
+<!--    <parent>-->
+<!--        <groupId>org.springframework.boot</groupId>-->
+<!--        <artifactId>spring-boot-starter-parent</artifactId>-->
+<!--        <version>2.4.5</version>-->
+<!--        <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
+<!--    </parent>-->
+
     <artifactId>service</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
     <name>service</name>
 
     <properties>
@@ -37,21 +37,24 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.epam.esm</groupId>
+            <artifactId>dao</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-<!--            <version>2.6.1</version>-->
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-<!--            <version>2.6.1</version>-->
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-<!--            <version>2.6.1</version>-->
             <optional>true</optional>
         </dependency>
 
@@ -80,7 +83,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>2.6.1</version>
             <scope>test</scope>
         </dependency>
 
@@ -109,12 +111,7 @@
 <!--            <scope>compile</scope>-->
 <!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.epam.esm</groupId>
-            <artifactId>dao</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
+
     </dependencies>
 <!--    <dependencies>-->
 <!--        <dependency>-->

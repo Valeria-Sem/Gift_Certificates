@@ -41,34 +41,42 @@ public class TagController {
      * @return TagDTO object
      * @throws ServiceException if something goes wrong will be thrown
      */
-//    @PostMapping
-//    public ResponseEntity<TagDTO> save(@RequestBody TagDTO tag) throws ServiceException {
-//        TagDTO newTag = tagService.save(tag);
-//
-//        return new ResponseEntity<>(newTag, HttpStatus.valueOf(201));
-//    }
-//
-//    /**
-//     * Method for deleting tags
-//     *
-//     * @param id tag ID
-//     * @throws ServiceException if something goes wrong will be thrown
-//     */
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> delete(@PathVariable(name = "id") int id) throws ServiceException {
-//        tagService.delete(id);
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-//
-//    /**
-//     * Method for getting all Tags
-//     *
-//     * @return List with all tags from DB
-//     * @throws ServiceException if something goes wrong will be thrown
-//     */
-//    @GetMapping
-//    public ResponseEntity<List<TagDTO>> getAllTags() throws ServiceException {
-//        return new ResponseEntity<>(tagService.getAllTags(), HttpStatus.OK);
-//    }
+    @PostMapping
+    public ResponseEntity<TagDTO> save(@RequestBody TagDTO tag) throws ServiceException {
+        TagDTO newTag = tagService.save(tag);
+
+        return new ResponseEntity<>(newTag, HttpStatus.valueOf(201));
+    }
+
+    /**
+     * Method for deleting tags
+     *
+     * @param id tag ID
+     * @throws ServiceException if something goes wrong will be thrown
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) throws ServiceException {
+        tagService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * Method for getting all Tags
+     *
+     * @return List with all tags from DB
+     * @throws ServiceException if something goes wrong will be thrown
+     */
+    @GetMapping
+    public ResponseEntity<Iterable<TagDTO>> getAllTags() throws ServiceException {
+        return new ResponseEntity<>(tagService.getAllTags(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{name}")
+    public ResponseEntity<TagDTO> getTagByName(@PathVariable(name = "name") String name) {
+        TagDTO tagDTO = tagService.getTagByName(name);
+
+        return new ResponseEntity<>(tagDTO, HttpStatus.OK);
+    }
+
 }

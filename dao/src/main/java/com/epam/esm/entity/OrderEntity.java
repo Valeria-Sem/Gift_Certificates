@@ -1,32 +1,35 @@
 package com.epam.esm.entity;
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "order", schema = "gift_certificates")
+@Table(name = "orders", schema = "gift_certificates")
 public class OrderEntity {
-    private int id;
-    private GiftCertificateEntity giftIdByGiftCertificate;
-    private UserEntity userIdByUserEntity;
+    private Long id;
+    private GiftCertificateEntity gift;
+    private UserEntity user;
     private double price;
-    private Date time;
+    private Time time;
 
     public OrderEntity() {
     }
 
-    public OrderEntity(int id, GiftCertificateEntity giftIdByGiftCertificate, UserEntity userIdByUserEntity, double price, Date time) {
+    public OrderEntity(Long id, GiftCertificateEntity gift,
+                       UserEntity user, double price, Time time) {
         this.id = id;
-        this.giftIdByGiftCertificate = giftIdByGiftCertificate;
-        this.userIdByUserEntity = userIdByUserEntity;
+        this.gift = gift;
+        this.user = user;
         this.price = price;
         this.time = time;
     }
 
-    public OrderEntity(GiftCertificateEntity giftIdByGiftCertificate, UserEntity userIdByUserEntity, double price, Date time) {
-        this.giftIdByGiftCertificate = giftIdByGiftCertificate;
-        this.userIdByUserEntity = userIdByUserEntity;
+    public OrderEntity(GiftCertificateEntity gift,
+                       UserEntity user, double price, Time time) {
+        this.gift = gift;
+        this.user = user;
         this.price = price;
         this.time = time;
     }
@@ -34,32 +37,32 @@ public class OrderEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     @ManyToOne
     @JoinColumn(name = "gift_id", referencedColumnName = "id", nullable = false)
-    public GiftCertificateEntity getGiftIdByGiftCertificate() {
-        return giftIdByGiftCertificate;
+    public GiftCertificateEntity getGift() {
+        return gift;
     }
 
-    public void setGiftIdByGiftCertificate(GiftCertificateEntity giftIdByGiftCertificate) {
-        this.giftIdByGiftCertificate = giftIdByGiftCertificate;
+    public void setGift(GiftCertificateEntity gift) {
+        this.gift = gift;
     }
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    public UserEntity getUserIdByUserEntity() {
-        return userIdByUserEntity;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setUserIdByUserEntity(UserEntity userIdByUserEntity) {
-        this.userIdByUserEntity = userIdByUserEntity;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     @Basic
@@ -74,11 +77,11 @@ public class OrderEntity {
 
     @Basic
     @Column(name = "time")
-    public Date getTime() {
+    public Time getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(Time time) {
         this.time = time;
     }
 
@@ -87,23 +90,24 @@ public class OrderEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderEntity that = (OrderEntity) o;
-        return id == that.id && Double.compare(that.price, price) == 0 &&
-                giftIdByGiftCertificate.equals(that.giftIdByGiftCertificate) &&
-                userIdByUserEntity.equals(that.userIdByUserEntity) &&
+        return Double.compare(that.price, price) == 0 &&
+                id.equals(that.id) &&
+                gift.equals(that.gift) &&
+                user.equals(that.user) &&
                 time.equals(that.time);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, giftIdByGiftCertificate, userIdByUserEntity, price, time);
+        return Objects.hash(id, gift, user, price, time);
     }
 
     @Override
     public String toString() {
         return "OrderEntity{" +
                 "id=" + id +
-                ", giftIdByGiftCertificate=" + giftIdByGiftCertificate +
-                ", userIdByUserEntity=" + userIdByUserEntity +
+                ", gift=" + gift +
+                ", user=" + user +
                 ", price=" + price +
                 ", time=" + time +
                 '}';

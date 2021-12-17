@@ -6,14 +6,14 @@ import java.util.Objects;
 @Entity
 @Table(name = "user", schema = "gift_certificates")
 public class UserEntity {
-    private int id;
+    private Long id;
     private String login;
     private WalletEntity wallet;
 
     public UserEntity() {
     }
 
-    public UserEntity(int id, String login, WalletEntity wallet) {
+    public UserEntity(Long id, String login, WalletEntity wallet) {
         this.id = id;
         this.login = login;
         this.wallet = wallet;
@@ -27,11 +27,11 @@ public class UserEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -45,7 +45,7 @@ public class UserEntity {
         this.login = login;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "wallet_id", referencedColumnName = "id")
     public WalletEntity getWallet() {
         return wallet;
@@ -60,7 +60,8 @@ public class UserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity user = (UserEntity) o;
-        return id == user.id && login.equals(user.login);
+        return Objects.equals(id, user.id) &&
+                login.equals(user.login);
     }
 
     @Override

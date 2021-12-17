@@ -69,6 +69,6 @@ public class MyControllerAdvice {
      */
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<String> handleInvalidData(NullPointerException exception) {
-        return new ResponseEntity<String>(exception.getLocalizedMessage(), HttpStatus.valueOf("500"));
+        return new ResponseEntity<>(exception.getLocalizedMessage(), HttpStatus.valueOf("500"));
     }
 }
