@@ -2,9 +2,12 @@ package com.epam.esm.service;
 
 
 import com.epam.esm.dto.UserDTO;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public interface UserService {
-    Iterable<UserDTO> findAllUsers ();
+    List<UserDTO> findAllUsers () throws ServiceException;
 
-    UserDTO findUserById(Long id);
+    UserDTO findUserById(Long id) throws ServiceException;
 }

@@ -1,11 +1,13 @@
 package com.epam.esm.entity;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "user", schema = "gift_certificates")
-public class UserEntity {
+public class UserEntity extends RepresentationModel<UserEntity> {
     private Long id;
     private String login;
     private WalletEntity wallet;

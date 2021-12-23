@@ -8,5 +8,5 @@ import java.util.Set;
 
 @Repository
 public interface TagRepository extends JpaRepository<TagEntity, Long> {
-    TagEntity findTagEntityByName(String name);
+    TagEntity findTagEntityByName(String name) throws RepoException;
 }

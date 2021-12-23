@@ -1,0 +1,6 @@
+com\epam\esm\controller\OrderController.class
+com\epam\esm\controller\GiftCertificateController.class
+com\epam\esm\controller\UserController.class
+com\epam\esm\controller\WebApp.class
+com\epam\esm\controller\advice\MyControllerAdvice.class
+com\epam\esm\controller\TagController.class

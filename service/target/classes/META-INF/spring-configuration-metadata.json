@@ -1,0 +1,25 @@
+{
+  "groups": [
+    {
+      "name": "dao.server",
+      "type": "com.epam.esm.config.CustomProperties",
+      "sourceType": "com.epam.esm.config.CustomProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "dao.server.timeout-in-milli-seconds",
+      "type": "java.lang.Integer",
+      "description": "The time to wait for the connection.",
+      "sourceType": "com.epam.esm.config.CustomProperties",
+      "defaultValue": 1000
+    },
+    {
+      "name": "dao.server.url",
+      "type": "java.lang.String",
+      "description": "Description for dao.server.url.",
+      "sourceType": "com.epam.esm.config.CustomProperties"
+    }
+  ],
+  "hints": []
+}

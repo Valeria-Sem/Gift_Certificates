@@ -1,5 +1,7 @@
 package com.epam.esm.entity;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import javax.persistence.*;
 import java.sql.Time;
 import java.util.Date;
@@ -7,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "orders", schema = "gift_certificates")
-public class OrderEntity {
+public class OrderEntity extends RepresentationModel<OrderEntity> {
     private Long id;
     private GiftCertificateEntity gift;
     private UserEntity user;

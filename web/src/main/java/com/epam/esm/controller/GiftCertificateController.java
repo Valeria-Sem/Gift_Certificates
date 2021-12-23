@@ -1,15 +1,24 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.dto.GiftCertificateDTO;
+import com.epam.esm.dto.TagDTO;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * @author Valeria
@@ -45,6 +54,15 @@ public class GiftCertificateController {
     @PostMapping
     public ResponseEntity<GiftCertificateDTO> save(@RequestBody GiftCertificateDTO giftCertificateDTO) throws ServiceException {
         GiftCertificateDTO newCertificate = giftCertificateService.save(giftCertificateDTO);
+        Link selfLink = linkTo(methodOn(GiftCertificateController.class)
+                .getCertificateById(newCertificate.getId())).withSelfRel();
+        newCertificate.add(selfLink);
+
+        for(TagDTO tag : newCertificate.getTags()){
+            Link tagLink = linkTo(methodOn(TagController.class)
+                    .getTagByName(tag.getName())).withRel("tagLink");
+            newCertificate.add(tagLink);
+        }
 
         return new ResponseEntity<>(newCertificate, HttpStatus.valueOf(201));
     }
@@ -58,6 +76,15 @@ public class GiftCertificateController {
     @PutMapping("/update")
     public ResponseEntity<GiftCertificateDTO> updateCertificate(@RequestBody GiftCertificateDTO certificate) throws ServiceException {
         GiftCertificateDTO gift = giftCertificateService.updateCertificate(certificate);
+        Link selfLink = linkTo(methodOn(GiftCertificateController.class)
+                .getCertificateById(gift.getId())).withSelfRel();
+        gift.add(selfLink);
+
+        for(TagDTO tag : gift.getTags()){
+            Link tagLink = linkTo(methodOn(TagController.class)
+                    .getTagByName(tag.getName())).withRel("tagLink");
+            gift.add(tagLink);
+        }
 
         return new ResponseEntity<>(gift, HttpStatus.valueOf(201));
     }
@@ -69,14 +96,46 @@ public class GiftCertificateController {
      * @throws ServiceException if something goes wrong will be thrown
      */
     @GetMapping
-    public ResponseEntity<List<GiftCertificateDTO>> getAllCertificates() throws ServiceException {
+    public ResponseEntity<Page<GiftCertificateDTO>> getAllCertificates(@RequestParam(name = "offset") int offset,
+                                                                       @RequestParam(name = "limit") int limit) throws ServiceException {
         List<GiftCertificateDTO> GiftCertificateDTOs = giftCertificateService.getAllCertificates();
-        return new ResponseEntity<>(GiftCertificateDTOs, HttpStatus.OK);
+        for(final GiftCertificateDTO gift : GiftCertificateDTOs){
+            Link link = linkTo(methodOn(GiftCertificateController.class)
+                    .getCertificateById(gift.getId())).withSelfRel();
+            gift.add(link);
+
+            for(TagDTO tag : gift.getTags()){
+                Link tagLink = linkTo(methodOn(TagController.class)
+                        .getTagByName(tag.getName())).withRel("tagLink");
+                gift.add(tagLink);
+            }
+        }
+
+        CollectionModel<GiftCertificateDTO> result = CollectionModel.of(GiftCertificateDTOs);
+
+        Pageable pageable = PageRequest.of(offset - 1, limit);
+        int start = (int)pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), GiftCertificateDTOs.size());
+
+        Page<GiftCertificateDTO> page = new PageImpl<>(GiftCertificateDTOs.subList(start, end), pageable, GiftCertificateDTOs.size());
+
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GiftCertificateDTO> getCertificateById(@PathVariable(name = "id") Long id) throws ServiceException {
         GiftCertificateDTO certificate = giftCertificateService.getCertificateById(id);
+        Link selfLink = linkTo(methodOn(GiftCertificateController.class)
+                .getCertificateById(id)).withSelfRel();
+        certificate.add(selfLink);
+
+        for(TagDTO tag : certificate.getTags()){
+            Link tagLink = linkTo(methodOn(TagController.class)
+                    .getTagByName(tag.getName())).withRel("tagLink");
+            certificate.add(tagLink);
+        }
+
+
         return new ResponseEntity<>(certificate, HttpStatus.OK);
     }
 

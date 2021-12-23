@@ -3,8 +3,12 @@ package com.epam.esm.service.impl;
 import com.epam.esm.converter.TagConverter;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.entity.TagEntity;
+import com.epam.esm.repository.RepoException;
 import com.epam.esm.repository.TagRepository;
+import com.epam.esm.service.ServiceException;
 import com.epam.esm.service.TagService;
+import com.epam.esm.service.validator.TagValidator;
+import com.epam.esm.service.validator.ValidatorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,80 +19,104 @@ import java.util.List;
 public class TagServiceImpl implements TagService {
     private final TagRepository tagRepository;
     private final TagConverter tagConverter;
+    private final TagValidator tagValidator;
 
     @Autowired
-    public TagServiceImpl(TagRepository tagRepository, TagConverter tagConverter) {
+    public TagServiceImpl(TagRepository tagRepository,
+                          TagConverter tagConverter,
+                          TagValidator tagValidator) {
         this.tagRepository = tagRepository;
         this.tagConverter = tagConverter;
+        this.tagValidator = tagValidator;
     }
 
     @Override
-    public TagDTO save(TagDTO tag) {
+    public TagDTO save(TagDTO tag) throws ServiceException {
         TagEntity tagEntity;
         TagDTO tagDTO;
 
         try {
+            tagValidator.validateTagName(tag.getName());
+
             tagEntity = tagConverter.mapToEntity(tag);
             tagEntity = tagRepository.save(tagEntity);
 
             tagDTO = tagConverter.mapToDto(tagEntity);
 
             return tagDTO;
-        } catch (Exception ex){
-            ex.printStackTrace();
-            ex.getLocalizedMessage();
+        } catch (Exception e){
+            throw new ServiceException(e.getLocalizedMessage(), e);
         }
-        return null;
     }
 
     @Override
-    public void delete(Long id) {
-        tagRepository.deleteById(id);
-
+    public void delete(Long id) throws ServiceException{
+        try{
+            tagValidator.validateId(id);
+            tagRepository.deleteById(id);
+        } catch (Exception e){
+            throw new ServiceException(e.getLocalizedMessage(), e);
+        }
     }
 
     @Override
-    public Iterable<TagDTO> getAllTags() {
+    public List<TagDTO> getAllTags() throws ServiceException{
         List<TagEntity> tagEntities;
         List<TagDTO> tagDTOs;
 
-        tagEntities = tagRepository.findAll();
-        tagDTOs = tagConverter.mapToDto(tagEntities);
+        try{
+            tagEntities = tagRepository.findAll();
+            tagDTOs = tagConverter.mapToDto(tagEntities);
 
-        return tagDTOs;
+            return tagDTOs;
+        } catch (Exception e){
+            throw new ServiceException(e.getLocalizedMessage(), e);
+        }
     }
 
     @Override
-    public TagDTO getTagByName(String name) {
+    public TagDTO getTagByName(String name) throws ServiceException{
         TagEntity tagEntity;
         TagDTO tagDTO;
 
-        tagEntity = tagRepository.findTagEntityByName(name);
-        tagDTO = tagConverter.mapToDto(tagEntity);
+        try{
+            tagValidator.validateTagName(name);
 
-        return tagDTO;
+            tagEntity = tagRepository.findTagEntityByName(name);
+            tagDTO = tagConverter.mapToDto(tagEntity);
+
+            return tagDTO;
+        } catch (RepoException | ValidatorException e){
+            throw new ServiceException(e.getLocalizedMessage(), e);
+        }
     }
 
     @Override
-    public List<TagDTO> getTagsByNames(List<TagDTO> tegNames) {
+    public List<TagDTO> getTagsByNames(List<TagDTO> tegNames) throws ServiceException {
         List<TagDTO> tagDTOs;
         List<TagEntity> tagEntities = new ArrayList<>();
         TagDTO newTagDTO;
         TagEntity newTagEntity;
 
-        for(TagDTO tag: tegNames) {
-            if (tagRepository.findTagEntityByName(tag.getName()) != null){
-                tagEntities.add(tagRepository.findTagEntityByName(tag.getName()));
-            } else {
-                newTagDTO = save(tag);
-                newTagEntity = tagConverter.mapToEntity(newTagDTO);
+        try{
+            tagValidator.validateTagsName(tegNames);
 
-                tagEntities.add(newTagEntity);
+            for(TagDTO tag: tegNames) {
+                if (tagRepository.findTagEntityByName(tag.getName()) != null){
+                    tagEntities.add(tagRepository.findTagEntityByName(tag.getName()));
+                } else {
+                    newTagDTO = save(tag);
+                    newTagEntity = tagConverter.mapToEntity(newTagDTO);
+
+                    tagEntities.add(newTagEntity);
+                }
             }
+
+            tagDTOs = tagConverter.mapToDto(tagEntities);
+
+            return tagDTOs;
+        } catch (RepoException | ValidatorException e){
+            throw new ServiceException(e.getLocalizedMessage(), e);
         }
-
-        tagDTOs = tagConverter.mapToDto(tagEntities);
-
-        return tagDTOs;
     }
 }

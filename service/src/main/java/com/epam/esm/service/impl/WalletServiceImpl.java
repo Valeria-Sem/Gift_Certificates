@@ -4,6 +4,7 @@ import com.epam.esm.converter.WalletConverter;
 import com.epam.esm.dto.WalletDTO;
 import com.epam.esm.entity.WalletEntity;
 import com.epam.esm.repository.WalletRepository;
+import com.epam.esm.service.ServiceException;
 import com.epam.esm.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,14 +21,18 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public WalletDTO save(WalletDTO walletDTO) {
+    public WalletDTO save(WalletDTO walletDTO) throws ServiceException {
         WalletEntity walletEntity;
 
-        walletEntity = walletConverter.mapToEntity(walletDTO);
-        walletEntity = walletRepository.save(walletEntity);
+        try{
+            walletEntity = walletConverter.mapToEntity(walletDTO);
+            walletEntity = walletRepository.save(walletEntity);
 
-        walletDTO = walletConverter.mapToDto(walletEntity);
+            walletDTO = walletConverter.mapToDto(walletEntity);
 
-        return walletDTO;
+            return walletDTO;
+        } catch (Exception e){
+            throw new ServiceException(e.getLocalizedMessage(), e);
+        }
     }
 }

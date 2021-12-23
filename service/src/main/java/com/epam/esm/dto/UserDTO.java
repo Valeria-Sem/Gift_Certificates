@@ -1,11 +1,12 @@
 package com.epam.esm.dto;
 
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
 @Component
-public class UserDTO {
+public class UserDTO extends RepresentationModel<UserDTO> {
     private Long id;
     private String login;
     private WalletDTO wallet;

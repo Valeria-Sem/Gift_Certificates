@@ -2,6 +2,7 @@ package com.epam.esm.converter;
 
 import com.epam.esm.dto.UserDTO;
 import com.epam.esm.entity.UserEntity;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -12,9 +13,9 @@ public interface UserConverter {
 
     List<UserEntity> mapToEntity(List<UserDTO> users);
 
-//    Iterable<UserDTO> mapToDto(Iterable<UserEntity> users);
+//    Page<UserDTO> mapToDto(Iterable<UserEntity> users);
 //
-//    Iterable<UserEntity> mapToEntity(Iterable<UserDTO> users);
+//    Page<UserEntity> mapToEntity(Iterable<UserDTO> users);
 
     UserEntity mapToEntity(UserDTO userDTO);
 

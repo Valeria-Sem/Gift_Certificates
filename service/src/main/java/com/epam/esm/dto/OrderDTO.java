@@ -1,5 +1,6 @@
 package com.epam.esm.dto;
 
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
 import java.sql.Time;
@@ -7,14 +8,12 @@ import java.util.Date;
 import java.util.Objects;
 
 @Component
-public class OrderDTO {
+public class OrderDTO extends RepresentationModel<OrderDTO> {
     private Long id;
     private GiftCertificateDTO gift;
     private UserDTO user;
     private double price;
     private Time time;
-//    private long userId;
-//    private long giftId;
 
     public OrderDTO() {
     }
@@ -73,22 +72,6 @@ public class OrderDTO {
     public void setTime(Time time) {
         this.time = time;
     }
-
-//    public long getUserId() {
-//        return userId;
-//    }
-//
-//    public void setUserId(long userId) {
-//        this.userId = userId;
-//    }
-//
-//    public long getGiftId() {
-//        return giftId;
-//    }
-//
-//    public void setGiftId(long giftId) {
-//        this.giftId = giftId;
-//    }
 
     @Override
     public boolean equals(Object o) {

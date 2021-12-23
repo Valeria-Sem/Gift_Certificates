@@ -1,0 +1,11 @@
+com\epam\esm\repository\UserRepository.class
+com\epam\esm\entity\UserEntity.class
+com\epam\esm\repository\WalletRepository.class
+com\epam\esm\entity\OrderEntity.class
+com\epam\esm\entity\WalletEntity.class
+com\epam\esm\repository\OrderRepository.class
+com\epam\esm\repository\TagRepository.class
+com\epam\esm\entity\GiftCertificateEntity.class
+com\epam\esm\entity\TagEntity.class
+com\epam\esm\DaoApp.class
+com\epam\esm\repository\GiftCertificateRepository.class

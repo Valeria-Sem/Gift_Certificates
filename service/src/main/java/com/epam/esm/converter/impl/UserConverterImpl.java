@@ -5,6 +5,7 @@ import com.epam.esm.dto.UserDTO;
 import com.epam.esm.entity.UserEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class UserConverterImpl implements UserConverter {
     public List<UserEntity> mapToEntity(List<UserDTO> users) {
         return users.stream().map(this::mapToEntity).collect(Collectors.toList());
     }
+
 
     @Override
     public UserEntity mapToEntity(UserDTO userDTO) {

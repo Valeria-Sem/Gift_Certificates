@@ -8,8 +8,11 @@ import com.epam.esm.dto.UserDTO;
 import com.epam.esm.entity.OrderEntity;
 import com.epam.esm.entity.UserEntity;
 import com.epam.esm.repository.OrderRepository;
+import com.epam.esm.repository.RepoException;
 import com.epam.esm.service.*;
+import com.epam.esm.service.validator.GiftCertificateValidator;
 import com.epam.esm.service.validator.OrderValidator;
+import com.epam.esm.service.validator.UserValidator;
 import com.epam.esm.service.validator.ValidatorException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +50,7 @@ public class OrderServiceImpl implements OrderService {
         this.userConverter = userConverter;
     }
 
+
     @Override
     @Transactional
     public OrderDTO save(OrderDTO order) throws ServiceException {
@@ -81,33 +85,46 @@ public class OrderServiceImpl implements OrderService {
             orderDTO = orderConverter.mapToDto(orderEntity);
 
             return orderDTO;
-        } catch (ValidatorException e) {
+        } catch (Exception e) {
             throw new ServiceException(e.getLocalizedMessage(), e);
         }
     }
 
     @Override
-    public List<OrderDTO> getUserOrder(UserDTO user) {
+    public List<OrderDTO> getUserOrder(long userId) throws ServiceException {
         List<OrderDTO> orderDTOs;
         List<OrderEntity> orderEntities;
+        UserDTO userDTO;
         UserEntity userEntity;
 
-        userEntity = userConverter.mapToEntity(user);
+        try {
+            userDTO = userService.findUserById(userId);
 
-        orderEntities = orderRepository.findOrderEntitiesByUser(userEntity);
-        orderDTOs = orderConverter.mapToDto(orderEntities);
+            userEntity = userConverter.mapToEntity(userDTO);
 
-        return orderDTOs;
+            orderEntities = orderRepository.findOrderEntitiesByUser(userEntity);
+            orderDTOs = orderConverter.mapToDto(orderEntities);
+
+            return orderDTOs;
+        } catch (RepoException e){
+            throw new ServiceException(e.getLocalizedMessage(), e);
+        }
     }
 
     @Override
-    public OrderDTO getOrderById(Long id) {
+    public OrderDTO getOrderById(Long id) throws ServiceException {
         OrderDTO orderDTO;
         OrderEntity orderEntity;
 
-        orderEntity = orderRepository.findOrderEntityById(id);
-        orderDTO = orderConverter.mapToDto(orderEntity);
+        try {
+            orderValidator.validateId(id);
 
-        return orderDTO;
+            orderEntity = orderRepository.findOrderEntityById(id);
+            orderDTO = orderConverter.mapToDto(orderEntity);
+
+            return orderDTO;
+        } catch (RepoException | ValidatorException e){
+            throw new ServiceException(e.getLocalizedMessage(), e);
+        }
     }
 }

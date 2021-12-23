@@ -1,5 +1,6 @@
 package com.epam.esm.dto;
 
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -8,7 +9,6 @@ import java.util.Objects;
 public class WalletDTO {
     private Long id;
     private double balance;
-//    private UserDTO user;
 
     public WalletDTO() {
     }
@@ -21,12 +21,6 @@ public class WalletDTO {
     public WalletDTO(double balance) {
         this.balance = balance;
     }
-
-//    public WalletDTO(int id, double balance, UserDTO user) {
-//        this.id = id;
-//        this.balance = balance;
-////        this.user = user;
-//    }
 
     public Long getId() {
         return id;
@@ -43,14 +37,6 @@ public class WalletDTO {
     public void setBalance(double balance) {
         this.balance = balance;
     }
-//
-//    public UserDTO getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(UserDTO user) {
-//        this.user = user;
-//    }
 
     @Override
     public boolean equals(Object o) {
@@ -59,7 +45,6 @@ public class WalletDTO {
         WalletDTO walletDTO = (WalletDTO) o;
         return Objects.equals(id, walletDTO.id) &&
                 Double.compare(walletDTO.balance, balance) == 0;
-//                && Objects.equals(user, walletDTO.user);
     }
 
     @Override
